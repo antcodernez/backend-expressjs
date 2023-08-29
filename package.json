@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "lint": ""
+    "lint": "eslint",
+    "phoenix": "rm -f package-lock.json && rm -rf ./node_modules && npm install --no-fund --no-audit"
   },
   "keywords": [
     "nodejs",
@@ -16,10 +17,11 @@
   ],
   "author": "Jesus Antonio Estrada Jimenez",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "eslint": "^8.48.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
+    "nodemon": "^3.0.1",
     "prettier": "^3.0.2"
   }
 }
