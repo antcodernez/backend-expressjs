@@ -1,0 +1,25 @@
+{
+  "name": "my-store",
+  "version": "1.0.0",
+  "description": "This is my first api development on nodejs and express.js",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "lint": ""
+  },
+  "keywords": [
+    "nodejs",
+    "express.js",
+    "javascript",
+    "e-commerce"
+  ],
+  "author": "Jesus Antonio Estrada Jimenez",
+  "license": "ISC",
+  "dependencies": {
+    "eslint": "^8.48.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.2"
+  }
+}
