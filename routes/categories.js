@@ -21,6 +21,38 @@ router.get("/categories/:categoryId/products/:productId", (req, res) => {
     });
 });
 
+router.post(`/:id`, (req, res) =>
+  {
+    const {id} = req.params;
+    const body = req.body;
+    res.status(201).json(
+      {
+        id,
+        data: body,
+        message: "Se guardo correctamente la categoria"
+      }
+    );
+  });
 
+router.patch("/:id", (req, res) =>
+  {
+    const body = req.body;
+    const {id} = req.params;
+    res.json(
+      {
+        message: "Se actualizo correctamente",
+        id,
+        data: body
+      });
+  });
+
+router.delete("/:id", (req, res) =>
+  {
+    const {id} = req.params;
+    res.json(
+      {
+          message: "Se elimino correctamente la categoria con el id: " + id
+      });
+  });
 module.exports = router;
 

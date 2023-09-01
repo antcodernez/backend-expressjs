@@ -32,8 +32,6 @@ router.get("/", (req, res) => {
 router.get("/filter", (red, res) => {
     res.send("Yo soy un filter");
 });
-
-
 //endpont para recibir o devolder el detalle de un producto recibiendo el id
 //Al momento de crearlo, los dos puntitos : significan que es un parametro
 router.get("/:id", (req, res) => {
@@ -72,6 +70,13 @@ router.patch("/:id", (req, res) => {
       id
     });
   })
+
+router.put("/:id", (req, res) => {
+    const body = req.body;
+    res.json({
+      data: body
+    })
+  });
 
 router.delete("/:id", (req, res) => {
     const {id} = req.params;
