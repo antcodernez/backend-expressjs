@@ -46,6 +46,12 @@ router.get("/:id", (req, res) => {
     });
 })
 
-
+router.post("/", (req, res) => {
+    const body = req.body;
+    res.json({
+      message: "Todo se guardo muy bien master",
+      data: body
+    });
+  })
 //Lo hacemos un modulo exportable
 module.exports = router;
