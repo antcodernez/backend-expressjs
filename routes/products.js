@@ -53,5 +53,24 @@ router.post("/", (req, res) => {
       data: body
     });
   })
+
+router.patch("/:id", (req, res) => {
+    const body = req.body;
+    const {id} = req.params;
+    res.json({
+      message: "Todo se actualizo muy bien master",
+      data: body,
+      id
+    });
+  })
+
+router.delete("/:id", (req, res) => {
+    const {id} = req.params;
+    res.json({
+      message: "Se elimino bien master",
+      id
+    });
+  })
+
 //Lo hacemos un modulo exportable
 module.exports = router;
