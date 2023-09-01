@@ -38,17 +38,26 @@ router.get("/filter", (red, res) => {
 //Al momento de crearlo, los dos puntitos : significan que es un parametro
 router.get("/:id", (req, res) => {
     const { id }= req.params; //recogemos el id que me estan enviando y lo vamos a enviar el la respuesta, eso viene el request(req)
-    res.json({
-      id,
-      name: "t-shirt",
-      price: 300,
-      details: "You will be awesome with this"
-    });
+    if(id > 999) //Todos los parametros que se envian en el get, se envian como string, entonces debo asegurarme de definir que sea un string(aunque aqui funciona, debe ser por el debil tipado)
+      {
+        res.status(404).json({
+          message: `El ID ${id} que solicitaste no se encuentra rey`
+        });
+      }
+    else
+      {
+        res.status(200).json({
+          id,
+          name: faker.commerce.productName(),
+          price: faker.commerce.price(),
+          details: "You will be awesome with this"
+        });
+      }
 })
 
 router.post("/", (req, res) => {
     const body = req.body;
-    res.json({
+    res.status(201).json({
       message: "Todo se guardo muy bien master",
       data: body
     });
