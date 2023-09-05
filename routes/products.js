@@ -1,7 +1,10 @@
 // Aqui van todas las rutas que van a ir con productos
 
 const express = require("express");
-const {faker} = require("@faker-js/faker"); //Libreria para simular datos nueva
+
+const ProductService = require(`../services/productsService`);//Importanto mi servicio creado
+
+const service = new ProductService();//Instanciar mi clase de servicio de productos
 
 const router = express.Router();
 
@@ -10,21 +13,7 @@ const router = express.Router();
 
 // Se borraron los endpoints de productos y se dejaron las partes especializadas
 router.get("/", (req, res) => {
-
-  const products = [];
-  const {size} = req.query;
-  const limit = size || 10;
-
-  for(let i = 0; i < limit; i++)
-    {
-      products.push(
-        {
-          id: i,
-          name: faker.commerce.productName(),
-          price: parseInt(faker.commerce.price()),
-          image: faker.image.url(),
-        });
-    }
+  const products = service.find();
   res.json(products);
 });
 
@@ -36,21 +25,8 @@ router.get("/filter", (red, res) => {
 //Al momento de crearlo, los dos puntitos : significan que es un parametro
 router.get("/:id", (req, res) => {
     const { id }= req.params; //recogemos el id que me estan enviando y lo vamos a enviar el la respuesta, eso viene el request(req)
-    if(id > 999) //Todos los parametros que se envian en el get, se envian como string, entonces debo asegurarme de definir que sea un string(aunque aqui funciona, debe ser por el debil tipado)
-      {
-        res.status(404).json({
-          message: `El ID ${id} que solicitaste no se encuentra rey`
-        });
-      }
-    else
-      {
-        res.status(200).json({
-          id,
-          name: faker.commerce.productName(),
-          price: faker.commerce.price(),
-          details: "You will be awesome with this"
-        });
-      }
+    const product = service.findOne(id);
+    res.json(product);
 })
 
 router.post("/", (req, res) => {

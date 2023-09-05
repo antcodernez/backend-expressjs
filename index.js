@@ -18,6 +18,6 @@ app.get('/', (req, res) => {
 routerApi(app);
 
 app.listen(port, () => {
-  console.log(`Ya estoy funcionando master en el puerto ${port}`);
+  console.log(`Ya estoy funcionando master en el puerto ${port} http://localhost:9222`);
 });
 
