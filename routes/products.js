@@ -8,10 +8,6 @@ const service = new ProductService();//Instanciar mi clase de servicio de produc
 
 const router = express.Router();
 
-//Lo que mas vamos a enviar es un json porque voy a crear una api
-//endpoint de productos, ahora usando la librearia faker estamos creando un query parameter de size para traer productos, el default es 10, pero puedo traer n cantidad
-
-// Se borraron los endpoints de productos y se dejaron las partes especializadas
 router.get("/", (req, res) => {
   const products = service.find();
   res.json(products);
@@ -21,6 +17,7 @@ router.get("/", (req, res) => {
 router.get("/filter", (red, res) => {
     res.send("Yo soy un filter");
 });
+
 //endpont para recibir o devolder el detalle de un producto recibiendo el id
 //Al momento de crearlo, los dos puntitos : significan que es un parametro
 router.get("/:id", (req, res) => {
@@ -31,10 +28,8 @@ router.get("/:id", (req, res) => {
 
 router.post("/", (req, res) => {
     const body = req.body;
-    res.status(201).json({
-      message: "Todo se guardo muy bien master",
-      data: body
-    });
+    const newProduct = service.create(body);
+    res.status(201).json(newProduct);
   })
 
 router.patch("/:id", (req, res) => {

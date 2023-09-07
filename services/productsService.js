@@ -23,10 +23,14 @@ class ProductService
                 });
             }
         }
-      create(item)
+      create(data)
         {
-            this.products.push(item);
-            return this.products;
+            const newProduct = {
+              id: faker.string.uuid(),
+              ...data
+            }
+            this.products.push(newProduct);
+            return newProduct;
         }
       find()
         {
@@ -36,9 +40,9 @@ class ProductService
         {
           return this.products.find(item => item.id == id);
         }
-      update()
+      update(id)
         {
-
+          const index = this.products.findIndex(item => item.id == id);
         }
       delete()
         {

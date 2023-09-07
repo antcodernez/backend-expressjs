@@ -1,6 +1,6 @@
 // Creamos la app
 const express = require("express");
-const routerApi = require("./routes");
+const routerApi = require("./routes/indexRouting");
 
 
 const app = express(); // ejecutamos express como metodo dato que es un metodo constructor
@@ -20,4 +20,3 @@ routerApi(app);
 app.listen(port, () => {
   console.log(`Ya estoy funcionando master en el puerto ${port} http://localhost:9222`);
 });
-
