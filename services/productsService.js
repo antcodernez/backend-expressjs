@@ -40,13 +40,20 @@ class ProductService
         {
           return this.products.find(item => item.id == id);
         }
-      update(id)
+      update(id, changes)
         {
           const index = this.products.findIndex(item => item.id == id);
+          const productOld =this.products[index];
+          return index === -1 ?   new Error("Product not found") :
+          this.products[index] = {
+            ...productOld,
+            ...changes
+          }, this.products[index];
         }
-      delete()
+      delete(id)
         {
-
+          const index = this.products.findIndex(item => item.id == id);
+          return index === -1 ?   new Error("Product not found") : this.products.splice(index, 1), {id: "Se elimino correctamente"};
         }
   }
 

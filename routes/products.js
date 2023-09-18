@@ -35,27 +35,22 @@ router.post("/", (req, res) => {
 router.patch("/:id", (req, res) => {
     const body = req.body;
     const {id} = req.params;
-    res.json({
-      message: "Todo se actualizo muy bien master",
-      data: body,
-      id
-    });
+    const product = service.update(id, body);
+    res.json(product);
   })
 
 router.put("/:id", (req, res) => {
     const body = req.body;
-    res.json({
-      data: body
-    })
+    const {id} = req.params;
+    const product = service.update(id, body);
+    res.json(product);
   });
 
 router.delete("/:id", (req, res) => {
     const {id} = req.params;
-    res.json({
-      message: "Se elimino bien master",
-      id
-    });
-  })
+    const response = service.delete(id);
+    res.status(200).json(response);
+  });
 
 //Lo hacemos un modulo exportable
 module.exports = router;
