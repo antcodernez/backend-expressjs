@@ -14,7 +14,7 @@ function routerApi(app)
       router.use("/categories", categoriesRouter);
       router.use("/my-orders", myOrders);
 
-      //Version 2 para IOT
+      //Version 2 para mobiles
       const routerIOT = express.Router()
       app.use("/api/v2", routerIOT);
       routerIOT.use("/products", productsRouter);

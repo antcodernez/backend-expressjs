@@ -8,8 +8,8 @@ const service = new ProductService();//Instanciar mi clase de servicio de produc
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  const products = service.find();
+router.get("/", async (req, res) => {
+  const products = await service.find();
   res.json(products);
 });
 
@@ -20,35 +20,44 @@ router.get("/filter", (red, res) => {
 
 //endpont para recibir o devolder el detalle de un producto recibiendo el id
 //Al momento de crearlo, los dos puntitos : significan que es un parametro
-router.get("/:id", (req, res) => {
+router.get("/:id", async (req, res) => {
     const { id }= req.params; //recogemos el id que me estan enviando y lo vamos a enviar el la respuesta, eso viene el request(req)
-    const product = service.findOne(id);
+    const product = await service.findOne(id);
     res.json(product);
 })
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
     const body = req.body;
-    const newProduct = service.create(body);
+    const newProduct = await service.create(body);
     res.status(201).json(newProduct);
   })
 
-router.patch("/:id", (req, res) => {
-    const body = req.body;
-    const {id} = req.params;
-    const product = service.update(id, body);
-    res.json(product);
+router.patch("/:id", async (req, res) => {
+    try
+      {
+        const body = req.body;
+        const {id} = req.params;
+        const product = await service.update(id, body);
+        res.json(product);
+      }
+    catch (error)
+      {
+        res.status(404).json({
+          message: error.message // .message es una propiedad del objeto error, ademas ese mensaje viene desde el servicio y se esta mostrando
+        })
+      }
   })
 
-router.put("/:id", (req, res) => {
+router.put("/:id", async (req, res) => {
     const body = req.body;
     const {id} = req.params;
-    const product = service.update(id, body);
+    const product = await service.update(id, body);
     res.json(product);
   });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", async (req, res) => {
     const {id} = req.params;
-    const response = service.delete(id);
+    const response = await service.delete(id);
     res.status(200).json(response);
   });
 
