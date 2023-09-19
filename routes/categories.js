@@ -1,58 +1,64 @@
 const express = require("express");
-const {faker} = require("@faker-js/faker");
 const router = express.Router();
 
+const CategoriesService = require("../services/categoriesService");
+
+const service = new CategoriesService();
+
 router.get("/", (req, res) => {
-  res.json({
-    categories: faker.commerce.department(),
-    categories2: faker.commerce.department(),
-    categories3: faker.commerce.department(),
-    categories4: faker.commerce.department(),
-    categories5: faker.commerce.department()
-  })
+  const departments = service.find();
+  res.json(departments);
 });
 
-//endpoint con dos parametros
-router.get("/categories/:categoryId/products/:productId", (req, res) => {
-  const {categoryId, productId} = req.params;
-  res.json({
-      categoryId,
-      productId
-    });
-});
 
-router.post(`/:id`, (req, res) =>
+router.get("/:id", (req, res) => {
+  const { id } = req.params;
+  const department = service.findOne(id);
+  res.json(department);
+});
+// //endpoint con dos parametros
+// router.get("/categories/:categoryId/products/:productId", (req, res) => {
+
+//   const {categoryId, productId} = req.params;
+//   res.json({
+//       categoryId,
+//       productId
+//     });
+// });
+
+router.post(`/`, (req, res) =>
   {
-    const {id} = req.params;
     const body = req.body;
-    res.status(201).json(
-      {
-        id,
-        data: body,
-        message: "Se guardo correctamente la categoria"
-      }
-    );
+    const newDepartment = service.create(body);
+    res.status(201).json(newDepartment)
   });
 
 router.patch("/:id", (req, res) =>
   {
-    const body = req.body;
-    const {id} = req.params;
-    res.json(
+    try
       {
-        message: "Se actualizo correctamente",
-        id,
-        data: body
-      });
+        const body = req.body;
+        const {id} = req.params;
+        const department = service.update(id,body);
+        res.json(department);
+      }
+    catch (error)
+      {
+        res.status(404).json(
+          {
+            message: error.message
+          }
+          )
+      }
+
   });
 
 router.delete("/:id", (req, res) =>
   {
     const {id} = req.params;
-    res.json(
-      {
-          message: "Se elimino correctamente la categoria con el id: " + id
-      });
+    const response = service.delete(id);
+    res.status(200).json(response);
   });
+
 module.exports = router;
 

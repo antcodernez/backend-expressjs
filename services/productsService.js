@@ -32,15 +32,27 @@ class ProductService
             this.products.push(newProduct);
             return newProduct;
         }
-      async find()
+      async find(query)
         {
-          return new Promise((resolve, reject) => {
-            setTimeout(() => resolve(this.products), 4000);
-          })
+          if (query == undefined)
+            {
+              return new Promise((resolve) =>
+                {
+                  setTimeout(() => resolve(this.products), 1000);
+                });
+            }
+          else
+            {
+              return new Promise((resolve) =>
+                {
+                  setTimeout(() => resolve(this.products.slice(0,query)), 1000);
+                });
+            }
         }
       async findOne(id)
         {
-          return this.products.find(item => item.id == id);
+          const element  = this.products.find(item => item.id == id);
+          return element == undefined ? "404 recurso no encontrado" : element;
         }
       async update(id, changes)
         {
