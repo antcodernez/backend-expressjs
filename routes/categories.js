@@ -44,7 +44,7 @@ router.patch("/:id", (req, res) =>
       }
     catch (error)
       {
-        res.status(404).json(
+        res.json(
           {
             message: error.message
           }

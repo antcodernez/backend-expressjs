@@ -1,52 +1,53 @@
 const express = require("express");
-const {faker} = require("@faker-js/faker");
 const router = express.Router();
+const OrderService = require("../services/ordersService.js")
+
+
+const service = new OrderService();
 
 router.get("/", (req, res) => {
-  const productsRandom = [];
-  const numberOrders = parseInt(Math.random() * (11 - 1) + 1);
-
-  for(let i = 0; i < numberOrders; i++)
-    {
-        productsRandom[i] = faker.commerce.product();
-    }
-
-  res.json({
-    orders:numberOrders,
-    products: productsRandom,
-  })
+  const myOrders = service.find();
+  res.json(myOrders);
 });
+
+router.get("/:id", (req, res) => {
+  const {id} = req.params;
+  const order = service.findOne(id);
+
+  res.json(order);
+});
+
 
 router.post("/", (req, res) =>
   {
     const body = req.body;
-    res.status(201).json(
-      {
-        message: "Se guardo correctamente la orden",
-        data: body
-      });
+    const order = service.create(body);
+    res.status(201).json(order);
   });
 
 router.patch("/:id", (req, res) =>
   {
-    const body = req.body;
-    const {id} = req.params;
-    res.status(201).json(
+    try
       {
-        message: "Se guardo correctamente master",
-        data: body,
-        id
-      });
+        const body = req.body;
+        const {id} = req.params;
+        const orderUpdate = service.update(id, body);
+        res.status(201).json(orderUpdate);
+      }
+    catch(error)
+      {
+        res.json({
+          message: error.message
+        })
+      }
+
   });
 
 router.delete("/:id", (req, res) =>
   {
     const {id} = req.params;
-    res.json(
-      {
-        message: "Se elimino muy bien master",
-        id
-      });
+    const orderDeleted = service.delete(id);
+    res.json(orderDeleted);
   });
 
 module.exports = router;
