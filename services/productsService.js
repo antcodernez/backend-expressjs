@@ -63,10 +63,12 @@ class ProductService
               throw new Error("Product not found");
             }
 
-          this.products[index] = {
-            ...productOld,
-            ...changes
-          };
+          this.products[index] =
+            {
+              ...productOld,
+              ...changes
+            }
+
           return this.products[index];
         }
       async delete(id)
@@ -77,21 +79,3 @@ class ProductService
   }
 
 module.exports = ProductService;
-
-
-
-// if(id > 999) //Todos los parametros que se envian en el get, se envian como string, entonces debo asegurarme de definir que sea un string(aunque aqui funciona, debe ser por el debil tipado)
-//       {
-//         res.status(404).json({
-//           message: `El ID ${id} que solicitaste no se encuentra rey`
-//         });
-//       }
-//     else
-//       {
-//         res.status(200).json({
-//           id,
-//           name: faker.commerce.productName(),
-//           price: faker.commerce.price(),
-//           details: "You will be awesome with this"
-//         });
-//       }
