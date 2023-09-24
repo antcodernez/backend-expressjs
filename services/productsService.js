@@ -1,6 +1,7 @@
 //Vamos a definir la lógica de las interacciones a nivel transaccional que van a tener mi datos
 //Manejo transaccional hacia un producto
 const {faker} = require("@faker-js/faker");
+const boom =  require("@hapi/boom");
 
 class ProductService
   {
@@ -20,6 +21,7 @@ class ProductService
                   name: faker.commerce.productName(),
                   price: parseInt(faker.commerce.price()),
                   image: faker.image.url(),
+                  isBLock: faker.datatype.boolean()
                 });
             }
         }
@@ -52,7 +54,18 @@ class ProductService
       async findOne(id)
         {
           const element  = this.products.find(item => item.id == id);
-          return element == undefined ? "404 recurso no encontrado" : element;
+          if(!element)
+            {
+              throw boom.notFound("Product not found master");
+            }
+          if(element.isBLock)
+            {
+              throw boom.conflict("Product is block")
+            }
+          else
+            {
+              return element;
+            }
         }
       async update(id, changes)
         {
@@ -60,7 +73,7 @@ class ProductService
           const productOld =this.products[index];
           if( index === -1 )
             {
-              throw new Error("Product not found");
+              throw boom.notFound("Product not found :(");
             }
 
           this.products[index] =
@@ -74,7 +87,8 @@ class ProductService
       async delete(id)
         {
           const index = this.products.findIndex(item => item.id == id);
-          return index === -1 ?   new Error("Product not found") : this.products.splice(index, 1), {id: "Se elimino correctamente"};
+          return index === -1 ? boom.notFound("Product not f0und :(") :
+          this.products.splice(index, 1), {id: "Se elimino correctamente"};
         }
   }
 

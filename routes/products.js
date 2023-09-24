@@ -29,19 +29,31 @@ router.get("/filter", (red, res) => {
 
 //endpont para recibir o devolder el detalle de un producto recibiendo el id
 //Al momento de crearlo, los dos puntitos : significan que es un parametro
-router.get("/:id", async (req, res) => {
-    const { id }= req.params; //recogemos el id que me estan enviando y lo vamos a enviar el la respuesta, eso viene el request(req)
-    const product = await service.findOne(id);
+router.get("/:id", async (req, res, next) => {
+    // const { id }= req.params; //recogemos el id que me estan enviando y lo vamos a enviar el la respuesta, eso viene el request(req)
+    // const product = await service.findOne(id);
 
-    if("string" == typeof product)
+    // if("string" == typeof product)
+    //   {
+    //     res.status(404).json(product);
+    //   }
+    // else
+    //   {
+    //     res.status(200).json(product);
+    //   }
+
+    //Se comento esta parte del codigo para una nueva version
+    try
       {
-        res.status(404).json(product);
+        const { id } = req.params;
+        const product = await service.findOne(id);
+        res.json(product)
       }
-    else
+    catch (error)
       {
-        res.status(200).json(product);
+        next(error);
       }
-})
+  })
 
 router.post("/", async (req, res) => {
     const body = req.body;
@@ -49,7 +61,7 @@ router.post("/", async (req, res) => {
     res.status(201).json(newProduct);
   })
 
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", async (req, res, next) => {
     try
       {
         const body = req.body;
@@ -59,9 +71,7 @@ router.patch("/:id", async (req, res) => {
       }
     catch (error)
       {
-        res.status(404).json({
-          message: error.message // .message es una propiedad del objeto error, ademas ese mensaje viene desde el servicio y se esta mostrando
-        })
+        next(error);
       }
   })
 
