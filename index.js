@@ -1,8 +1,11 @@
 // Creamos la app
 const express = require("express");
 const routerApi = require("./routes/indexRouting");
+const cors = require("cors");
 
 const {logErrors, errorHandler, boomErrorHandler } = require("./middlewares/errorHandler");
+
+
 
 const app = express(); // ejecutamos express como metodo dato que es un metodo constructor
 const port = 9222; // donde quiero que corra mi app
@@ -10,6 +13,26 @@ const port = 9222; // donde quiero que corra mi app
 
 // implementamos in midleware nativo de express, se usa cuando quiero empezar a recibir informacion en formato json
 app.use(express.json());
+
+
+const  whiteList = ["http://127.0.0.1:5500", "http://myapp.com"]; //aqui van los origenes donde si quiero tener peticiones
+//Estos dos dominios van a tener permiso de hacer un request
+
+const options = {
+  origin: (origin, callback) => {
+      if(whiteList.includes(origin))
+        {
+           callback(null, true)
+           // null ----> se uso para decir que no hay error
+           // true ----> el acceso esta permitido
+        }
+      else
+        {
+          callback(new Error("No permitido"));
+        }
+    }
+  }
+//Se van a enviar las configuraciones al cors
 
 // Usamos la app
 app.get('/', (req, res) => {
@@ -22,8 +45,11 @@ routerApi(app);
 app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(errorHandler);
+app.use(cors(options)); //Implementando cors para remover la proteccion por defecto que es que solo se aceptan peticiones desde su mismo orig  en
+//Se implementaron las opciones del cors para solo aceptar ciertas apps controladas
 
 
 app.listen(port, () => {
   console.log(`Ya estoy funcionando master en el puerto ${port} http://localhost:9222`);
 });
+
