@@ -8,10 +8,10 @@ function validatorHandler(schema, property)
   return (req, res, next) => {
     //Este es el formato porque necesito construir middlewares dinamicos
     const data = req[property];
-    const { error } = schema.validate(data);
+    const { error } = schema.validate(data, { abortEarly: false});
     if(error)
       {
-        boom.badRequest(error);
+        next(boom.badRequest(error)); //Si no jala la enviamos a los mi
       }
     next();
   }
@@ -20,3 +20,6 @@ function validatorHandler(schema, property)
 //logica para validar datos que nos envian desde el cliente
 
 module.exports = validatorHandler;
+
+
+// schema.validate(data, {AbortEarly: false}); validara todos los errores y me los va a enviar todos de una vez

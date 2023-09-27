@@ -3,6 +3,9 @@
 const express = require("express");
 
 const ProductService = require(`../services/productsService`);//Importanto mi servicio creado
+const  validatorHandler = require(`../middlewares/validatorHandler`);
+
+const  {createProductSchema, updateProductSchema, getProductSchema} = require(`../schemas/productSchema`);
 
 const service = new ProductService();//Instanciar mi clase de servicio de productos
 
@@ -29,7 +32,13 @@ router.get("/filter", (red, res) => {
 
 //endpont para recibir o devolder el detalle de un producto recibiendo el id
 //Al momento de crearlo, los dos puntitos : significan que es un parametro
-router.get("/:id", async (req, res, next) => {
+
+//Vamos a concatenar un middleware, la funcion anonima que es esta, es un middleware
+
+// validatorHandler() va a ejecutarse y correra una validación de datos, hay que definir que schema queremos validar y de donde viene la informacion en este caso validamos el obtener el producto schema y se obtiene de params
+
+router.get("/:id", validatorHandler(getProductSchema, "params"),
+  async (req, res, next) => {
     // const { id }= req.params; //recogemos el id que me estan enviando y lo vamos a enviar el la respuesta, eso viene el request(req)
     // const product = await service.findOne(id);
 
@@ -43,6 +52,8 @@ router.get("/:id", async (req, res, next) => {
     //   }
 
     //Se comento esta parte del codigo para una nueva version
+
+
     try
       {
         const { id } = req.params;
@@ -55,34 +66,40 @@ router.get("/:id", async (req, res, next) => {
       }
   })
 
-router.post("/", async (req, res) => {
+router.post("/",validatorHandler(createProductSchema, "body") ,
+    async (req, res) => {
     const body = req.body;
     const newProduct = await service.create(body);
     res.status(201).json(newProduct);
   })
 
-router.patch("/:id", async (req, res, next) => {
-    try
-      {
-        const body = req.body;
-        const {id} = req.params;
-        const product = await service.update(id, body);
-        res.json(product);
-      }
-    catch (error)
-      {
-        next(error);
-      }
+router.patch("/:id", validatorHandler(getProductSchema, "params"),
+    validatorHandler(updateProductSchema, "body"),
+    async (req, res, next) => {
+      try
+        {
+          const body = req.body;
+          const {id} = req.params;
+          const product = await service.update(id, body);
+          res.json(product);
+        }
+      catch (error)
+        {
+          next(error);
+        }
   })
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", validatorHandler(getProductSchema, "params"),
+    validatorHandler(updateProductSchema, "body"),
+    async (req, res) => {
     const body = req.body;
     const {id} = req.params;
     const product = await service.update(id, body);
     res.json(product);
   });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", validatorHandler(getProductSchema, "params"),
+    async (req, res) => {
     const {id} = req.params;
     const response = await service.delete(id);
     res.status(200).json(response);
