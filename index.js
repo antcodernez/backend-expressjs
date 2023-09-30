@@ -15,7 +15,7 @@ const port = 9222; // donde quiero que corra mi app
 app.use(express.json());
 
 
-const  whiteList = ["http://127.0.0.1:5500", "http://myapp.com"]; //aqui van los origenes donde si quiero tener peticiones
+const  whiteList = ["http://127.0.0.1:5501", "http://myapp.com"]; //aqui van los origenes donde si quiero tener peticiones
 //Estos dos dominios van a tener permiso de hacer un request
 
 const options = {
@@ -32,7 +32,6 @@ const options = {
         }
     }
   }
-//Se van a enviar las configuraciones al cors
 
 // Usamos la app
 app.get('/', (req, res) => {
@@ -45,10 +44,10 @@ routerApi(app);
 app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(errorHandler);
-app.use(cors(options)); //Implementando cors para remover la proteccion por defecto que es que solo se aceptan peticiones desde su mismo orig  en
 //Se implementaron las opciones del cors para solo aceptar ciertas apps controladas
 
-
+//Se van a enviar las configuraciones al cors
+app.use(cors(options)); //Implementando cors para remover la proteccion por defecto que es que solo se aceptan peticiones desde su mismo origen
 app.listen(port, () => {
   console.log(`Ya estoy funcionando master en el puerto ${port} http://localhost:9222`);
 });
