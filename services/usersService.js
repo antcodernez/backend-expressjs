@@ -1,4 +1,5 @@
 const {faker} = require("@faker-js/faker");
+const boom = require("@hapi/boom");
 
 class UserService
   {
@@ -16,44 +17,67 @@ class UserService
               id: faker.string.uuid(),
               name: faker.person.fullName(),
               phone: faker.number.int(),
-              gender: faker.person.sexType()
-            }
-            )
+              gender: faker.person.sexType(),
+              isBlock: faker.datatype.boolean()
+            });
           }
       }
-    find()
+    async find(query)
       {
-        return this.users;
+        if(query == undefined)
+          {
+            return this.users;
+          }
+        else
+          {
+            return this.users.slice(0, query);
+          }
       }
-    findOne(id)
+    async findOne(id)
       {
         const element = this.users.find(item => item.id == id);
-        return element != undefined ? element : "404 no encontrado";
+
+        if(!element)
+          {
+            throw boom.notFound("User not found master");
+          }
+        else if(element.isBlock)
+          {
+            throw boom.conflict("This user is block");
+          }
+        else
+          {
+            return element
+          }
       }
-    update(id, changes)
+    async update(id, changes)
       {
         const index = this.users.findIndex(item => item.id == id);
         const userOld =this.users[index];
-
-        if( index === -1 )
+        if(typeof changes.isBlock != "boolean")
             {
-              throw new Error("Product not found");
+              throw boom.badRequest("The requiered data type must be boolean");
+            }
+        else if( index === -1 )
+            {
+              throw boom.notFound("User not found chef");
             }
 
-          this.users[index] =
-            {
-              ...userOld,
-              ...changes
-            }
+        this.users[index] =
+          {
+            ...userOld,
+            ...changes
+          }
 
           return this.users[index];
       }
-    delete(id)
+
+    async delete(id)
       {
         const index = this.users.findIndex(item => item.id == id);
-        return index === -1 ?   new Error("Product not found") : this.users.splice(index, 1), {id: "Se elimino correctamente"};
+        return index === -1 ? boom.notFound("User not found chef :("): this.users.splice(index, 1), {id: "Se elimino correctamente"};
       }
-    create(data)
+    async create(data)
       {
         const newUser = {
           id: faker.string.uuid(),

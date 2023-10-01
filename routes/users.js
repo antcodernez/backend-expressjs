@@ -10,51 +10,61 @@ router.get("/", async (req, res) => {
   const { limit } = req.query;
   if(limit != undefined)
     {
-      const users = await service.find();
-      res.status(200).json(users.slice(0, limit));
+      const users = await service.find(limit);
+      res.json(users);
     }
   else
     {
       const users = await service.find();
-      res.status(200).json(users);
+      res.json(users);
     }
 });
 
-router.post("/", async (req, res) =>
-  {
-      const body = req.body;
-      const newUser = await service.create(body);
-      res.status(201).json(newUser);
-  });
+router.post("/", validatorHandler(createUserSchema, "body"),
+  async (req, res) =>
+    {
+        const body = req.body;
+        const newUser = await service.create(body);
+        res.json(newUser);
+    });
 
-router.get("/:id", validatorHandler(),async (req, res) => {
-  const {id} = req.params;
-  const user = await service.findOne(id);
-  res.status(200).json(user);
+router.get("/:id", validatorHandler(getUserSchema, "params"), async (req, res, next) => {
+  try
+    {
+      const {id} = req.params;
+      const user = await service.findOne(id);
+      res.status(200).json(user);
+    }
+  catch(error)
+    {
+      next(error);
+    }
+
 });
 
-router.patch("/:id", async (req, res) =>
-  {
-    try
-      {
-        const body = req.body;
-        const {id} = req.params;
-        const user =  await service.update(id, body);
-        res.json(user);
-      }
-    catch (error)
-      {
-        res.status(404).json({
-          message: error.message
-        })
-      }
-  });
+router.patch("/:id",validatorHandler(getUserSchema, "params"),
+  validatorHandler(updateUserSchema, "body"),
+  async (req, res, next) =>
+    {
+      try
+        {
+          const body = req.body;
+          const {id} = req.params;
+          const user =  await service.update(id, body);
+          res.json(user);
+        }
+      catch (error)
+        {
+          next(error);
+        }
+    });
 
-router.delete("/:id", async(req, res) =>
-  {
-    const {id} = req.params;
-    const response = await service.delete(id);
-    res.status(200).json(response);
-  });
+router.delete("/:id", validatorHandler(getUserSchema, "params"),
+  async(req, res) =>
+    {
+      const {id} = req.params;
+      const response = await service.delete(id);
+      res.json(response);
+    });
 
 module.exports = router;

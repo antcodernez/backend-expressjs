@@ -58,7 +58,7 @@ class ProductService
             {
               throw boom.notFound("Product not found master");
             }
-          if(element.isBLock)
+          else if(element.isBLock)
             {
               throw boom.conflict("Product is block")
             }

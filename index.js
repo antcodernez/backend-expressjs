@@ -15,7 +15,7 @@ const port = 9222; // donde quiero que corra mi app
 app.use(express.json());
 
 
-const  whiteList = ["http://127.0.0.1:5501", "http://myapp.com"]; //aqui van los origenes donde si quiero tener peticiones
+const  whiteList = ["http://127.0.0.1:5501", "http://myapp.com", " http://localhost:9222"]; //aqui van los origenes donde si quiero tener peticiones
 //Estos dos dominios van a tener permiso de hacer un request
 
 const options = {

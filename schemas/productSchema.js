@@ -23,7 +23,7 @@ const createProductSchema = Joi.object({
 
 const updateProductSchema = Joi.object({
   name: name,
-  price: price
+  price: price,
 });
 
 //Validacion del get de un producto

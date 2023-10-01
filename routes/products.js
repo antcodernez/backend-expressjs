@@ -102,7 +102,7 @@ router.delete("/:id", validatorHandler(getProductSchema, "params"),
     async (req, res) => {
     const {id} = req.params;
     const response = await service.delete(id);
-    res.status(200).json(response);
+    res.json(response);
   });
 
 //Lo hacemos un modulo exportable
