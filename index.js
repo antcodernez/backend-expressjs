@@ -33,22 +33,22 @@ const options = {
     }
   }
 
+
 // Usamos la app
 app.get('/', (req, res) => {
     res.send(`<h1> Hola mi server en express papus </h1>`);
 });
 
 routerApi(app);
+//Se implementaron las opciones del cors para solo aceptar ciertas apps controladas
+//Se van a enviar las configuraciones al cors
+app.use(cors(options)); //Implementando cors para remover la proteccion por defecto que es que solo se aceptan peticiones desde su mismo origen
 
 //Implementado los middlewares de tipo error; este tipo de middleware se hacen despues del routing
 app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(errorHandler);
-//Se implementaron las opciones del cors para solo aceptar ciertas apps controladas
 
-//Se van a enviar las configuraciones al cors
-app.use(cors(options)); //Implementando cors para remover la proteccion por defecto que es que solo se aceptan peticiones desde su mismo origen
 app.listen(port, () => {
   console.log(`Ya estoy funcionando master en el puerto ${port} http://localhost:9222`);
 });
-

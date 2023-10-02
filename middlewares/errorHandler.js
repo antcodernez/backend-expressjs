@@ -10,7 +10,6 @@ function logErrors(error, req, res, next)
 
   }
 //Middleware que detecta un error pero va a crear un formato para mi cliente
-
 const errorHandler = (error, req, res, next) =>
   {
     res.status(500).json({
@@ -21,7 +20,6 @@ const errorHandler = (error, req, res, next) =>
 
 
 //Cannot set headers adter they are sent to the client error comun en node, se soluiciona en la funcion boomErrorHandler agregando un else
-
 const boomErrorHandler = (error, req, res, next) =>
   {
     if(error.isBoom) //Cuando creo un error por la libreria boom le agrega una propiedad llamada isBoom
