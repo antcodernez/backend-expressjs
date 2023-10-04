@@ -1,4 +1,5 @@
 const {faker} = require("@faker-js/faker");
+const boom = require("@hapi/boom");
 
 class ordersService
 {
@@ -20,14 +21,14 @@ class ordersService
             });
         }
     }
-  find()
+  async find()
     {
       return this.ordersList;
     }
   findOne(id)
     {
       const element = this.ordersList.find( item => item.id == id);
-      return element != undefined ? element : "404 no encontrado";
+      return element != undefined ? element : boom.notFound("Order not found chef");
     }
   create(data)
     {
@@ -38,14 +39,14 @@ class ordersService
       this.ordersList.push(newOrder);
       return newOrder;
     }
-  update(id,changes)
+  async update(id,changes)
     {
       const orderIndex = this.ordersList.findIndex(element => element.id == id);
       const orderUpdating = this.ordersList[orderIndex];
 
       if(orderIndex === -1)
         {
-          throw new Error("product not found");
+          throw boom.notFound("Order not found bitch ñ.ñr");
         }
 
       this.ordersList[orderIndex] = {

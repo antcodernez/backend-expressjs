@@ -33,7 +33,7 @@ router.get("/:id", validatorHandler(getUserSchema, "params"), async (req, res, n
     {
       const {id} = req.params;
       const user = await service.findOne(id);
-      res.status(200).json(user);
+      res.json(user);
     }
   catch(error)
     {
