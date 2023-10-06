@@ -43,7 +43,7 @@ async (req, res, next) =>
       {
         const body = req.body;
         const {id} = req.params;
-        const orderUpdate = service.update(id, body);
+        const orderUpdate = await service.update(id, body);
         res.json(orderUpdate);
       }
     catch(error)
@@ -52,10 +52,11 @@ async (req, res, next) =>
       }
   });
 
-router.delete("/:id", (req, res) =>
+router.delete("/:id", validatorHandler(getOrdersSchema, "params"),
+async (req, res) =>
   {
     const {id} = req.params;
-    const orderDeleted = service.delete(id);
+    const orderDeleted = await service.delete(id);
     res.json(orderDeleted);
   });
 

@@ -2,10 +2,10 @@ const Joi = require("joi");
 
 const id = Joi.string().uuid();
 const price = Joi.number().min(10);
-const name = Joi.string().min(3).max(40);
+const product = Joi.string().min(3).max(40);
 
 const createOrdersSchema = Joi.object({
-  name: name.required(),
+  product: product.required(),
   price: price.required(),
 });
 
@@ -14,7 +14,7 @@ const getOrdersSchema = Joi.object({
 });
 
 const updateOrdersSchema = Joi.object({
-  name: name,
+  product: product,
   price: price
 });
 

@@ -19,6 +19,7 @@ const updateUserSchema = Joi.object({
   name: name,
   phone: phone,
   gender: gender,
+  isBlock: Joi.boolean()
 });
 
 

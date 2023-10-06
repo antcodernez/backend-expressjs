@@ -1,5 +1,5 @@
 const {faker} = require("@faker-js/faker");
-
+const boom = require("@hapi/boom");
 
 class CategoriesService
 {
@@ -10,7 +10,7 @@ class CategoriesService
     }
   generate()
     {
-      const limit = 25;
+      const limit = 35;
       for(let i = 0; i < limit; i++)
         {
           this.categories.push(
@@ -20,16 +20,16 @@ class CategoriesService
             });
         }
     }
-  find()
+  async find(query)
     {
-      return this.categories;
+      return query == undefined ? this.categories : this.categories.slice(0, query);
     }
-  findOne(id)
+  async findOne(id)
     {
       const element = this.categories.find( item => item.id == id);
-      return element != undefined ? element : "404 no encontrado";
+      return element != undefined ? element : boom.notFound("categorie not found :(");
     }
-  create(data)
+  async create(data)
     {
       const newDepartment = {
         id: faker.string.uuid(),
@@ -38,14 +38,14 @@ class CategoriesService
       this.categories.push(newDepartment);
       return newDepartment;
     }
-  update(id, changes)
+  async update(id, changes)
     {
       const index = this.categories.findIndex(item => item.id == id);
       const categoryOld = this.categories[index];
 
       if(index === -1)
         {
-          throw new Error("product not found");
+          throw boom.notFound("This department isn't avaliable");
         }
        this.categories[index] =
           {
@@ -54,11 +54,11 @@ class CategoriesService
           }
         return this.categories[index];
     }
-  delete(id)
+  async delete(id)
     {
       const index = this.categories.findIndex(item => item.id == id);
 
-      return index === -1 ?  new Error ("product not fund") : this.categories.splice(index, 1), {"message": "se elimino correctamente el departamento con el id" + id};
+      return index === -1 ?  boom.notFound("This isn't avaliable") : this.categories.splice(index, 1), {"message": "se elimino correctamente el departamento con el id" + id};
 
     }
 

@@ -57,12 +57,12 @@ class ordersService
       return this.ordersList[orderIndex];
     }
 
-  delete(id)
+  async delete(id)
     {
       const index = this.ordersList.findIndex(item => item.id == id);
 
       return index === -1 ?
-        new Error ("product not fund") :
+        boom.notFound("order not fund ñ.ñ") :
         this.ordersList.splice(index, 1), {"message": "se elimino correctamente su orden con el id" + id};
     }
 }
