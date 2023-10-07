@@ -27,7 +27,15 @@ class CategoriesService
   async findOne(id)
     {
       const element = this.categories.find( item => item.id == id);
-      return element != undefined ? element : boom.notFound("categorie not found :(");
+
+      if(element != undefined)
+        {
+          return element
+        }
+      else
+        {
+          throw boom.notFound("categorie not found xd");
+        }
     }
   async create(data)
     {
@@ -59,7 +67,6 @@ class CategoriesService
       const index = this.categories.findIndex(item => item.id == id);
 
       return index === -1 ?  boom.notFound("This isn't avaliable") : this.categories.splice(index, 1), {"message": "se elimino correctamente el departamento con el id" + id};
-
     }
 
 }

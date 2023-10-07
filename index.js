@@ -8,8 +8,8 @@ const {logErrors, errorHandler, boomErrorHandler } = require("./middlewares/erro
 
 
 const app = express(); // ejecutamos express como metodo dato que es un metodo constructor
-const port = 9222; // donde quiero que corra mi app
-
+const port = process.env.PORT || 9222; // donde quiero que corra mi app
+//asignando un puerto que viene en una variable de entorno porque no sabemos que puerto nos van asignar
 
 // implementamos in midleware nativo de express, se usa cuando quiero empezar a recibir informacion en formato json
 app.use(express.json());
@@ -20,7 +20,8 @@ const  whiteList = ["http://127.0.0.1:5501", "http://myapp.com", " http://localh
 
 const options = {
   origin: (origin, callback) => {
-      if(whiteList.includes(origin))
+      //Cuando coloque una lista de apps a recibir, se cambio el defecto que era que el propio servidor se podia hacer peticiones asi mismo entonces implementamos || !origin para para que se valident los origenes en las whitelist o not sea el origen
+      if(whiteList.includes(origin) || !origin )
         {
            callback(null, true)
            // null ----> se uso para decir que no hay error
@@ -28,7 +29,7 @@ const options = {
         }
       else
         {
-          callback(new Error("No permitido"));
+          callback(new Error("No Tienes permitido pasar ahí ñ.ñ"));
         }
     }
   }
