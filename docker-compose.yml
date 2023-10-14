@@ -11,19 +11,15 @@ services: #voy a crear un servicio
      # - POSTGRES_USER=yisus
      # - POSTGRES_PASSWORD=lolitoxd28
     ports:
-    "${DB_PORT}:${DB_PORT}"
+    - "${DB_PORT}:${DB_PORT}"
      # - 5432:5432
     volumes:
       - ./postgres_data:/var/lib/postgresql/data #estoy asignando persistencia a la bd y aqui se van a tener todos los datos de la db
 
   pgadmin:
-    #environment:
-     # PGADMIN_DEFAULT_EMAIL: admin@mail.com
-     # PGADMIN_DEFAULT_PASSWORD: root
-    depends_on:
-      - postgres
     image: dpage/pgadmin4 #imagen de la que quiero levantar
-    env_file:
-      - .env
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@mail.com
+      PGADMIN_DEFAULT_PASSWORD: root
     ports:
       - "5050:80" #le estamos asignando puertos uno es de la pc y el otro es el del contenedor
