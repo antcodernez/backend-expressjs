@@ -1,22 +1,29 @@
 version: "3.3"
 
 services: #voy a crear un servicio
-  postgres: 
+  postgres:
     container_name: my_postgres_container  # Asigna un nombre personalizado al contenedor
     image: postgres:13
-    environment: # definimos variables de entorno
-      - POSTGRES_DB=my_store
-      - POSTGRES_USER=yisus
-      - POSTGRES_PASSWORD=lolitoxd28
+    env_file:
+      - .env
+    # environment: # definimos variables de entorno
+     # - POSTGRES_DB=my_store
+     # - POSTGRES_USER=yisus
+     # - POSTGRES_PASSWORD=lolitoxd28
     ports:
-      - 5432:5432
+    "${DB_PORT}:${DB_PORT}"
+     # - 5432:5432
     volumes:
       - ./postgres_data:/var/lib/postgresql/data #estoy asignando persistencia a la bd y aqui se van a tener todos los datos de la db
 
   pgadmin:
+    #environment:
+     # PGADMIN_DEFAULT_EMAIL: admin@mail.com
+     # PGADMIN_DEFAULT_PASSWORD: root
+    depends_on:
+      - postgres
     image: dpage/pgadmin4 #imagen de la que quiero levantar
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@mail.com
-      PGADMIN_DEFAULT_PASSWORD: root
+    env_file:
+      - .env
     ports:
       - "5050:80" #le estamos asignando puertos uno es de la pc y el otro es el del contenedor
