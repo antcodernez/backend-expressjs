@@ -1,5 +1,6 @@
 const {faker} = require("@faker-js/faker");
 const boom = require("@hapi/boom");
+const getConnection = require("../libs/postgres");
 
 class CategoriesService
 {
@@ -20,9 +21,12 @@ class CategoriesService
             });
         }
     }
-  async find(query)
+  async find()
     {
-      return query == undefined ? this.categories : this.categories.slice(0, query);
+      // return query == undefined ? this.categories : this.categories.slice(0, query);
+      const client = await getConnection();
+      const response = await client.query("select * from tb_tasks");
+      return response.rows;
     }
   async findOne(id)
     {

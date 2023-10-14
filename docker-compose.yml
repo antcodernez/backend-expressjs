@@ -1,7 +1,7 @@
 version: "3.3"
 
 services: #voy a crear un servicio
-  postgres:
+  postgres: 
     container_name: my_postgres_container  # Asigna un nombre personalizado al contenedor
     image: postgres:13
     environment: # definimos variables de entorno
@@ -20,4 +20,3 @@ services: #voy a crear un servicio
       PGADMIN_DEFAULT_PASSWORD: root
     ports:
       - "5050:80" #le estamos asignando puertos uno es de la pc y el otro es el del contenedor
-

@@ -5,18 +5,19 @@ const service = new CategoriesService();
 const validatorHandler = require("../middlewares/validatorHandler");
 const {createCategorieSchema, getCategorieSchema, updateCategoriesSchema} = require("../schemas/categoriesSchema.js");
 
-router.get("/", async (req, res) => {
-  const {limit} = req.query;
-  if(limit != undefined)
-    {
-      const departments = await service.find(limit);
-      res.json(departments);
-    }
-  else
-    {
-      const departments = await service.find();
-      res.json(departments);
-    }
+router.get("/", async (req, res, next) => {
+  // const {limit} = req.query;
+  // if(limit != undefined)
+  //
+   try
+      {
+        const departments = await service.find();
+        res.json(departments);
+      }
+    catch (error)
+      {
+        next(error);
+      }
 });
 
 
