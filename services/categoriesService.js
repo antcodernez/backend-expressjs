@@ -2,12 +2,14 @@ const {faker} = require("@faker-js/faker");
 const boom = require("@hapi/boom");
 const getConnection = require("../libs/postgres");
 
+
 class CategoriesService
 {
   constructor()
     {
-      this.categories = [],
-      this.generate()
+      this.categories = [];
+      this.generate();
+     
     }
   generate()
     {
@@ -27,6 +29,7 @@ class CategoriesService
       const client = await getConnection();
       const response = await client.query("select * from tb_tasks");
       return response.rows;
+
     }
   async findOne(id)
     {
