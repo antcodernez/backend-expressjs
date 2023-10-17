@@ -1,6 +1,7 @@
 const {faker} = require("@faker-js/faker");
 const boom = require("@hapi/boom");
-const pool = require("../libs/postgres.pool" );
+// const pool = require("../libs/postgres.pool" ); se cambio por una en sequelize
+const sequelize = require("../libs/sequelize");
 
 
 class ordersService
@@ -9,8 +10,9 @@ class ordersService
     {
       this.ordersList = [];
       this.generate();
-      this.pool = pool; //Le asigno el pool
-      this.pool.on("error", (err) => console.log(err)); //
+
+      // this.pool = pool; //Le asigno el pool
+      // this.pool.on("error", (err) => console.log(err)); // no es necesario por sequelize
     }
   generate()
     {
@@ -28,8 +30,10 @@ class ordersService
   async find()
     {
       const query = "select * from tb_tasks";
-      const response = await this.pool.query(query);
-      return response.rows;
+      const [data] = await sequelize.query(query);
+      return data;
+      //sequelize acepta consultas directas y retorna la informacion en un array, la primera posicion tiene la data y en la segunda es la metadata       const [data, metadata] = await sequelize.query(query);
+
     }
   findOne(id)
     {
