@@ -1,5 +1,6 @@
 const {faker} = require("@faker-js/faker");
 const boom = require("@hapi/boom");
+const {models} = require("./../libs/sequelize");
 
 class UserService
   {
@@ -22,16 +23,19 @@ class UserService
             });
           }
       }
-    async find(query)
+    async find()
       {
-        if(query == undefined)
-          {
-            return this.users;
-          }
-        else
-          {
-            return this.users.slice(0, query);
-          }
+        const response = await models.User.findAll();
+        return response;
+        // if(query == undefined)
+        //   {
+        //     return this.users;
+        //   }
+        // else
+        //   {
+        //     return this.users.slice(0, query);
+        //   }
+
       }
     async findOne(id)
       {

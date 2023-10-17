@@ -6,18 +6,27 @@ const validatorHandler = require("../middlewares/validatorHandler.js");
 const {createUserSchema, getUserSchema, updateUserSchema} = require("../schemas/usersSchema.js");
 const service = new UserService();
 
-router.get("/", async (req, res) => {
-  const { limit } = req.query;
-  if(limit != undefined)
-    {
-      const users = await service.find(limit);
-      res.json(users);
-    }
-  else
+router.get("/", async (req, res, next) => {
+  try
     {
       const users = await service.find();
       res.json(users);
     }
+  catch(e)
+    {
+      next(e);
+    }
+  // const { limit } = req.query;
+  // if(limit != undefined)
+  //   {
+  //     const users = await service.find(limit);
+  //     res.json(users);
+  //   }
+  // else
+  //   {
+  //     const users = await service.find();
+  //     res.json(users);
+  //   }
 });
 
 router.post("/", validatorHandler(createUserSchema, "body"),

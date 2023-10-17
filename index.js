@@ -2,10 +2,7 @@
 const express = require("express");
 const routerApi = require("./routes/indexRouting");
 const cors = require("cors");
-
 const {logErrors, errorHandler, boomErrorHandler } = require("./middlewares/errorHandler");
-
-
 
 const app = express(); // ejecutamos express como metodo dato que es un metodo constructor
 const port = process.env.PORT || 9222; // donde quiero que corra mi app
