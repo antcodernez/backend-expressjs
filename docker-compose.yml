@@ -2,7 +2,7 @@ version: "3.3"
 
 services: #voy a crear un servicio
   postgres:
-    container_name:    # Asigna un nombre personalizado al contenedor
+    container_name: my_postgres_container    # Asigna un nombre personalizado al contenedor
     image: postgres:13
     env_file:
       - .env
