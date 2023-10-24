@@ -10,7 +10,7 @@ const UserSchema = {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER 
+    type: DataTypes.INTEGER
   },
   email: {
     allowNull: false,
@@ -27,7 +27,6 @@ const UserSchema = {
     field: "create_at", //este sera su nombre en la bd y arriba sera su nombre para manipularlo en JS
     defaultValue: Sequelize.NOW
   }
-
 } //define su estructura en la bd != los schemas que validan la informacion de entrada
 
 
@@ -44,7 +43,7 @@ class User extends Model { // Model tiene metodos que seran las formas en las qu
       sequelize, //Que conexion va a tener
       tableName: USER_TABLE, //nombre de la tabla
       modelName: "User", //definimos el nombre del modelo
-      timeStamps: false
+      timestamps: false
     }
   }
 }

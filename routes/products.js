@@ -11,18 +11,28 @@ const service = new ProductService();//Instanciar mi clase de servicio de produc
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  const {limit} = req.query;
-    if(limit != undefined)
-      {
-        const products = await service.find(limit);
-        res.json(products);
-      }
-    else
-      {
-        const products = await service.find();
-        res.json(products);
-      }
+router.get("/", async (req, res, next) => {
+  // const {limit} = req.query;
+  //   if(limit != undefined)
+  //     {
+  //       const products = await service.find(limit);
+  //       res.json(products);
+  //     }
+  //   else
+  //     {
+  //       const products = await service.find();
+  //       res.json(products);
+  //     } codigo viejo deprecado
+
+  try
+    {
+      const products = await service.find();
+      res.json(products);
+    }
+  catch (error)
+    {
+      next(error);
+    }
 });
 
 //Todo lo que es especifico debe ir antes de todo lo que es dinamico, en este caso los endpoints de filter y :id no chocan porque antes esta filter, que id pero si filter lo bajaramos antes de /products/:id me retornaria filter como un id y chocarian los endpoints de la api

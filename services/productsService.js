@@ -2,6 +2,7 @@
 //Manejo transaccional hacia un producto
 const {faker} = require("@faker-js/faker");
 const boom =  require("@hapi/boom");
+const {models} = require("../libs/sequelize");
 
 class ProductService
   {
@@ -34,22 +35,25 @@ class ProductService
             this.products.push(newProduct);
             return newProduct;
         }
-      async find(query)
+      async find()
         {
-          if (query == undefined)
-            {
-              return new Promise((resolve) =>
-                {
-                  setTimeout(() => resolve(this.products), 1000);
-                });
-            }
-          else
-            {
-              return new Promise((resolve) =>
-                {
-                  setTimeout(() => resolve(this.products.slice(0,query)), 1000);
-                });
-            }
+          // if (query == undefined)
+          //   {
+          //     return new Promise((resolve) =>
+          //       {
+          //         setTimeout(() => resolve(this.products), 1000);
+          //       });
+          //   }
+          // else
+          //   {
+          //     return new Promise((resolve) =>
+          //       {
+          //         setTimeout(() => resolve(this.products.slice(0,query)), 1000);
+          //       });
+          //   } codigo deprecado
+
+          const response = await models.Product.findAll();
+          return response;
         }
       async findOne(id)
         {
