@@ -15,4 +15,7 @@ setupModels(sequelize);
 
 sequelize.sync() //Va a hacer una sincronizacion; va a tomar los modelos y va a crear la estructura
 
+// Existe el modo de sincronización global sequelize.sync() o particular modelo.sync()` donde tendremos parámetros:
+//force: true. Eliminar la existencia previa y creando en secuencia.
+//alter: true. Revisa si se cambiará alguna estructura, la nueva vs la previa.
 module.exports = sequelize;
