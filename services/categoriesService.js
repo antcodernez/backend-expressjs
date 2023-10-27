@@ -1,6 +1,7 @@
 const {faker} = require("@faker-js/faker");
 const boom = require("@hapi/boom");
-const getConnection = require("../libs/postgres");
+const { models} = require("./../libs/sequelize");
+// const getConnection = require("../libs/postgres"); codigo viejo, remplazado por el modelo en sequelize
 
 
 class CategoriesService
@@ -9,7 +10,7 @@ class CategoriesService
     {
       this.categories = [];
       this.generate();
-     
+
     }
   generate()
     {
@@ -25,10 +26,12 @@ class CategoriesService
     }
   async find()
     {
+      const response = await models.Categorie.findAll();
+      return response;
       // return query == undefined ? this.categories : this.categories.slice(0, query);
-      const client = await getConnection();
-      const response = await client.query("select * from tb_tasks");
-      return response.rows;
+      // const client = await getConnection();
+      // const response = await client.query("select * from tb_tasks");
+      // return response.rows;
 
     }
   async findOne(id)

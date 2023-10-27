@@ -35,7 +35,6 @@ const ProductSchema = {
 
 // define o extend Model
 // Se infiere el nombre de la tabla y se generaliza en plural, sequelize.define('user', userSchema); definirá la tabla users.
-
 class Product extends Model
   {
     static associate()
