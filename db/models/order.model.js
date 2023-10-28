@@ -1,15 +1,15 @@
-const {Model, DataTypes, Sequelize} = require("sequelize");
+const {Model, Sequelize, DataTypes} = require ("sequelize");
 
-const CATEGORIE_TABLE = "tb_categories";
+const ORDER_TABLE = "tb_orders";
 
-const CategorieSchema = {
-  id: {
+const OrderSchema = {
+  id:{
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
     type: DataTypes.INTEGER
   },
-  name: {
+  productName: {
     allowNull: false,
     type: DataTypes.STRING
   },
@@ -18,10 +18,10 @@ const CategorieSchema = {
     type: DataTypes.DATE,
     field: "create_at",
     defaultValue: Sequelize.NOW()
-  }
-}
 
-class Categorie extends Model {
+  }}
+
+class Order extends Model {
   static associate()
     {
 
@@ -29,11 +29,12 @@ class Categorie extends Model {
   static config(sequelize){
     return {
       sequelize,
-      tableName: CATEGORIE_TABLE,
-      modelName: "Categorie",
-      timestamps: false
+      tableName: ORDER_TABLE,
+      modelName: "Order",
+      timestaps: false
     }
   }
 }
 
-module.exports = {CATEGORIE_TABLE, CategorieSchema, Categorie};
+
+module.exports = {ORDER_TABLE, OrderSchema, Order}

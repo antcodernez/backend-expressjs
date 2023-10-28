@@ -1,7 +1,9 @@
 const {faker} = require("@faker-js/faker");
 const boom = require("@hapi/boom");
 // const pool = require("../libs/postgres.pool" ); se cambio por una en sequelize
-const sequelize = require("../libs/sequelize");
+// const sequelize = require("../libs/sequelize"); codigo deprecado
+
+const {models } = require("../libs/sequelize");
 
 
 class ordersService
@@ -29,11 +31,12 @@ class ordersService
     }
   async find()
     {
-      const query = "select * from tb_tasks";
-      const [data] = await sequelize.query(query);
-      return data;
+      // const query = "select * from tb_tasks";
+      // const [data] = await sequelize.query(query);
+      // return data; CODIGO DEPRECADO POR OTRA VERSION
       //sequelize acepta consultas directas y retorna la informacion en un array, la primera posicion tiene la data y en la segunda es la metadata       const [data, metadata] = await sequelize.query(query);
-
+      const response = await models.Order.findAll();
+      return response;
     }
   findOne(id)
     {

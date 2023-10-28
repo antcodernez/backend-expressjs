@@ -3,7 +3,7 @@
 const {User, UserSchema } = require("./user.model");
 const {Product, ProductSchema} = require("./product.model");
 const {Categorie, CategorieSchema} = require("./categorie.model")
-
+const {Order, OrderSchema} = require("./order.model");
 //Vamos a crear una funcion, tiene como parametro la conexion
 function setupModels(sequelize)
 {
@@ -14,5 +14,7 @@ function setupModels(sequelize)
   // recibe como parametro el schema y seguido la configuracion que es un metodo estatico sin necesidad de una instancia
   Product.init(ProductSchema, Product.config(sequelize));
   Categorie.init(CategorieSchema, Categorie.config(sequelize));
+  Order.init(OrderSchema, Order.config(sequelize));
 }
+
 module.exports = setupModels;

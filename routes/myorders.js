@@ -7,9 +7,18 @@ const { getOrdersSchema, updateOrdersSchema, createOrdersSchema } = require("../
 
 const service = new OrderService();
 
-router.get("/", async(req, res) => {
-  const myOrders = await service.find();
-  res.json(myOrders);
+router.get("/", async (req, res, next) => {
+  // const myOrders = await service.find();
+  // res.json(myOrders);
+  try
+    {
+      const myOrders = await service.find();
+      res.json(myOrders);
+    }
+  catch (error)
+    {
+      next(error);
+    }
 });
 
 router.get("/:id", validatorHandler(getOrdersSchema, "params"),
