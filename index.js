@@ -3,7 +3,7 @@ const express = require("express");
 const routerApi = require("./routes/indexRouting");
 const cors = require("cors");
 const {logErrors, errorHandler, boomErrorHandler } = require("./middlewares/errorHandler");
-
+const queryErrorHandler = require("./middlewares/errorSequelize");
 const app = express(); // ejecutamos express como metodo dato que es un metodo constructor
 const port = process.env.PORT || 9222; // donde quiero que corra mi app
 //asignando un puerto que viene en una variable de entorno porque no sabemos que puerto nos van asignar
@@ -46,6 +46,8 @@ app.use(cors(options)); //Implementando cors para remover la proteccion por defe
 app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(errorHandler);
+app.use(queryErrorHandler);
+
 
 app.listen(port, () => {
   console.log(`Ya estoy funcionando master en el puerto ${port} http://localhost:9222`);

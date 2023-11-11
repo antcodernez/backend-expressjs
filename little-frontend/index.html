@@ -10,7 +10,6 @@
     (async () => {
       const response = await fetch("http://localhost:9222/api/v1/products");
       const data = await response.json();
-
       console.log(data);
     })();
     // La funcion de arriba se declaro como una IIFE que es una funcion de js que corre tan pronto como es definida, asi se define (function)()

@@ -30,11 +30,19 @@ router.get("/", async (req, res, next) => {
 });
 
 router.post("/", validatorHandler(createUserSchema, "body"),
-  async (req, res) =>
+  async (req, res, next) =>
     {
-        const body = req.body;
-        const newUser = await service.create(body);
-        res.json(newUser);
+      try
+        {
+          const body = req.body;
+          const newUser = await service.create(body);
+          res.json(newUser);
+        }
+      catch (error)
+        {
+          next(error);
+        }
+
     });
 
 router.get("/:id", validatorHandler(getUserSchema, "params"), async (req, res, next) => {
