@@ -1,6 +1,4 @@
-const boom = require('@hapi/boom');
 const { ValidationError } = require('sequelize');
-const boomErrorHandler = require("./errorHandler");
 // function handleSQLError(err, req, res, next)
 //   {
 //     if(err instanceof ValidationError)
@@ -14,7 +12,13 @@ const boomErrorHandler = require("./errorHandler");
 
 const queryErrorHandler = (err, req, res, next) => {
   if (err instanceof ValidationError)
-    boomErrorHandler(boom.badRequest(err.message), req, res, next);
+    {
+      res.status(409).json({
+        statusCode: 409,
+        message: err.name,
+        errors: err.errors
+      });
+    }
   next(err);
 };
 

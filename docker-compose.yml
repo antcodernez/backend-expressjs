@@ -11,7 +11,7 @@ services: #voy a crear un servicio
      # - POSTGRES_USER=yisus
      # - POSTGRES_PASSWORD=lolitoxd28
     ports:
-    - "${DB_PORT}:${DB_PORT}"
+    - 5432:5432
      # - 5432:5432
     volumes:
       - ./postgres_data:/var/lib/postgresql/data #estoy asignando persistencia a la bd y aqui se van a tener todos los datos de la db
@@ -23,3 +23,22 @@ services: #voy a crear un servicio
       PGADMIN_DEFAULT_PASSWORD: root
     ports:
       - "5050:80" #le estamos asignando puertos uno es de la pc y el otro es el del contenedor
+  #mysql:
+ #   image: mysql:5
+ #   environment:
+ #     - MYSQL_DATABASE=my_store
+ #     - MYSQL_USER=root
+ #     - MYSQL_ROOT_PASSWORD=admin123
+ #     - MYSQL_PORT=3306
+  #  ports:
+  #    - 3306:3306
+  #  volumes:
+   #   - ./mysql_data:/var/lib/mysql
+
+  #phpmyadmin:
+   # image: phpmyadmin/phpmyadmin
+   # environment:
+    #  - MYSQL_ROOT_PASSWORD=admin123
+    #  - PMA_HOST=mysql
+    # ports:
+    #  - 8080:80

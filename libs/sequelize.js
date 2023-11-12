@@ -4,8 +4,9 @@ const setupModels = require("../db/models");
 
 const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
-const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
 
+ const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
+//const URI = "mysql://tester:tucola23@localhost:3306/my_store";
 const sequelize = new Sequelize(URI, {
   dialect: "postgres",
 }); // el va a usar el pooling por detras
