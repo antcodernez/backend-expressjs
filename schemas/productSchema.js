@@ -3,13 +3,12 @@
 const Joi = require("joi");
 //crearemos un schema especifico para cada campo me ayuda a reutilizar mejor y usar el codigo en las actualizaciones y la creacion
 
-const id = Joi.string().uuid();
+const id = Joi.number();
 // tipo de campo que es string() y luego la validacion uuid()
 const name = Joi.string().min(3).max(20);
-
 const price = Joi.number().integer().min(10);
-
 const img = Joi.string().uri();
+const isBlock = Joi.bool();
 //Arriba: validaciones
 
 //creando un schema para la validacion, reunira todos los campos
@@ -17,17 +16,19 @@ const createProductSchema = Joi.object({
   //aqui pongo si es requerido o no un cambio
   name: name.required(),
   price: price.required(),
-  image:img.required()
+  image:img.required(),
+  isBlock: isBlock
 });
 
 
 const updateProductSchema = Joi.object({
   name: name,
   price: price,
+  image:img,
+  isBlock: isBlock
 });
 
 //Validacion del get de un producto
-
 
 const getProductSchema = Joi.object({
   id: id.required(),

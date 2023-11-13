@@ -28,12 +28,14 @@ class ProductService
         }
       async create(data)
         {
-            const newProduct = {
-              id: faker.string.uuid(),
-              ...data
-            }
-            this.products.push(newProduct);
-            return newProduct;
+            // const newProduct = {
+            //   id: faker.string.uuid(),
+            //   ...data
+            // }
+            // this.products.push(newProduct);
+            // return newProduct; CODIGO DEPRECADO
+          const product = await models.Product.create(data);
+          return product;
         }
       async find()
         {
@@ -57,42 +59,57 @@ class ProductService
         }
       async findOne(id)
         {
-          const element  = this.products.find(item => item.id == id);
-          if(!element)
+          // const element  = this.products.find(item => item.id == id);
+          // if(!element)
+          //   {
+          //     throw boom.notFound("Product not found master");
+          //   }
+          // else if(element.isBLock)
+          //   {
+          //     throw boom.conflict("Product is block")
+          //   }
+          // else
+          //   {
+          //     return element;
+          //   } CODIGO DEPRECADO
+
+          const product = await models.Product.findByPk(id);
+
+          if(!product)
             {
-              throw boom.notFound("Product not found master");
+              throw boom.notFound("Product not found chef");
             }
-          else if(element.isBLock)
-            {
-              throw boom.conflict("Product is block")
-            }
-          else
-            {
-              return element;
-            }
+          return product;
         }
       async update(id, changes)
         {
-          const index = this.products.findIndex(item => item.id == id);
-          const productOld =this.products[index];
-          if( index === -1 )
-            {
-              throw boom.notFound("Product not found :(");
-            }
+          // const index = this.products.findIndex(item => item.id == id);
+          // const productOld =this.products[index];
+          // if( index === -1 )
+          //   {
+          //     throw boom.notFound("Product not found :(");
+          //   }
 
-          this.products[index] =
-            {
-              ...productOld,
-              ...changes
-            }
+          // this.products[index] =
+          //   {
+          //     ...productOld,
+          //     ...changes
+          //   }
 
-          return this.products[index];
+          // return this.products[index]; CODIGO DEPRECADO
+          const product = await this.findOne(id);
+          const response = product.update(changes);
+          return response;
         }
       async delete(id)
         {
-          const index = this.products.findIndex(item => item.id == id);
-          return index === -1 ? boom.notFound("Product not f0und :(") :
-          this.products.splice(index, 1), {id: "Se elimino correctamente"};
+          // const index = this.products.findIndex(item => item.id == id);
+          // return index === -1 ? boom.notFound("Product not f0und :(") :
+          // this.products.splice(index, 1), {id: "Se elimino correctamente"}; CODIGO DEPRECADO
+
+          const product = this.findOne(id);
+          await product.destroy();
+          return {id};
         }
   }
 
