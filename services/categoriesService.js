@@ -36,47 +36,63 @@ class CategoriesService
     }
   async findOne(id)
     {
-      const element = this.categories.find( item => item.id == id);
+      // const element = this.categories.find( item => item.id == id);
 
-      if(element != undefined)
+      // if(element != undefined)
+      //   {
+      //     return element
+      //   }
+      // else
+      //   {
+      //     throw boom.notFound("categorie not found xd");
+      //   }
+
+      const categorie = await models.Categorie.findByPk(id);
+      if(!categorie)
         {
-          return element
+          throw boom.notFound("Categorie not found chef");
         }
-      else
-        {
-          throw boom.notFound("categorie not found xd");
-        }
+      return categorie;
     }
   async create(data)
     {
-      const newDepartment = {
-        id: faker.string.uuid(),
-        ...data
-      }
-      this.categories.push(newDepartment);
-      return newDepartment;
+      // const newDepartment = {
+      //   id: faker.string.uuid(),
+      //   ...data
+      // }
+      // this.categories.push(newDepartment);
+      // return newDepartment;
+      const newCategorie = await models.Categorie.create(data);
+      return newCategorie;
     }
   async update(id, changes)
     {
-      const index = this.categories.findIndex(item => item.id == id);
-      const categoryOld = this.categories[index];
+      // const index = this.categories.findIndex(item => item.id == id);
+      // const categoryOld = this.categories[index];
 
-      if(index === -1)
-        {
-          throw boom.notFound("This department isn't avaliable");
-        }
-       this.categories[index] =
-          {
-            ...categoryOld,
-            ...changes
-          }
-        return this.categories[index];
+      // if(index === -1)
+      //   {
+      //     throw boom.notFound("This department isn't avaliable");
+      //   }
+      //  this.categories[index] =
+      //     {
+      //       ...categoryOld,
+      //       ...changes
+      //     }
+      //   return this.categories[index];
+      const categorie = await this.findOne(id);
+      const response = categorie.update(id, changes);
+      return response;
     }
   async delete(id)
     {
-      const index = this.categories.findIndex(item => item.id == id);
+      // const index = this.categories.findIndex(item => item.id == id);
 
-      return index === -1 ?  boom.notFound("This isn't avaliable") : this.categories.splice(index, 1), {"message": "se elimino correctamente el departamento con el id" + id};
+      // return index === -1 ?  boom.notFound("This isn't avaliable") : this.categories.splice(index, 1), {"message": "se elimino correctamente el departamento con el id" + id};
+
+      const categorie = await this.findOne(id);
+      await categorie.destroy();
+      return {id};
     }
 
 }
