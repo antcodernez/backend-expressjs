@@ -21,12 +21,11 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-router.get("/:id", validatorHandler(getOrdersSchema, "params"),
-async (req, res, next) => {
+router.get("/:id", validatorHandler(getOrdersSchema, "params"), async (req, res, next) => {
   try
     {
       const {id} = req.params;
-      const order = service.findOne(id);
+      const order = await service.findOne(id);
       res.json(order);
     }
   catch(e)

@@ -14,10 +14,10 @@ const OrderSchema = {
     type: DataTypes.STRING
   },
   createdAt: {
-    allowNull: true,
+    allowNull: false,
     type: DataTypes.DATE,
     field: "create_at",
-    defaultValue: Sequelize.NOW()
+    defaultValue: Sequelize.NOW
 
   }}
 

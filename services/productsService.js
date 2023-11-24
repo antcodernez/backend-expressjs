@@ -107,9 +107,9 @@ class ProductService
           // return index === -1 ? boom.notFound("Product not f0und :(") :
           // this.products.splice(index, 1), {id: "Se elimino correctamente"}; CODIGO DEPRECADO
 
-          const product = this.findOne(id);
+          const product = await this.findOne(id);
           await product.destroy();
-          return {id};
+          return { id };
         }
   }
 

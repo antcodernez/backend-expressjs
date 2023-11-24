@@ -2,7 +2,6 @@ const {faker} = require("@faker-js/faker");
 const boom = require("@hapi/boom");
 // const pool = require("../libs/postgres.pool" ); se cambio por una en sequelize
 // const sequelize = require("../libs/sequelize"); codigo deprecado
-
 const { models} = require("../libs/sequelize");
 
 
@@ -38,45 +37,63 @@ class ordersService
       const response = await models.Order.findAll();
       return response;
     }
-  findOne(id)
+  async findOne(id)
     {
-      const element = this.ordersList.find( item => item.id == id);
-      return element != undefined ? element : boom.notFound("Order not found chef");
+      // const element = this.ordersList.find( item => item.id == id);
+      // return element != undefined ? element : boom.notFound("Order not found chef");
+      const order = await models.Order.findByPk(id);
+
+      if(order != null)
+        {
+          return order;
+        }
+        else
+        {
+          throw boom.notFound("Order not found");
+        }
     }
-  create(data)
+  async create(data)
     {
-      const newOrder = {
-        id: faker.string.uuid(),
-        ...data
-      }
-      this.ordersList.push(newOrder);
+      // const newOrder = {
+      //   id: faker.string.uuid(),
+      //   ...data
+      // }
+      // this.ordersList.push(newOrder);
+      // return newOrder;
+
+      const newOrder = await models.Order.create(data);
       return newOrder;
     }
   async update(id,changes)
     {
-      const orderIndex = this.ordersList.findIndex(element => element.id == id);
-      const orderUpdating = this.ordersList[orderIndex];
+      // const orderIndex = this.ordersList.findIndex(element => element.id == id);
+      // const orderUpdating = this.ordersList[orderIndex];
 
-      if(orderIndex === -1)
-        {
-          throw boom.notFound("Order not found bitch ñ.ñr");
-        }
+      // if(orderIndex === -1)
+      //   {
+      //     throw boom.notFound("Order not found bitch ñ.ñr");
+      //   }
 
-      this.ordersList[orderIndex] = {
-        ...orderUpdating,
-        ...changes
-      }
-
-      return this.ordersList[orderIndex];
+      // this.ordersList[orderIndex] = {
+      //   ...orderUpdating,
+      //   ...changes
+      // }
+      // return this.ordersList[orderIndex];
+      const order = await this.findOne(id);
+      const res = order.update(changes);
+      return res;
     }
 
   async delete(id)
     {
-      const index = this.ordersList.findIndex(item => item.id == id);
+      // const index = this.ordersList.findIndex(item => item.id == id);
 
-      return index === -1 ?
-        boom.notFound("order not fund ñ.ñ") :
-        this.ordersList.splice(index, 1), {"message": "se elimino correctamente su orden con el id" + id};
+      // return index === -1 ?
+      //   boom.notFound("order not fund ñ.ñ") :
+      //   this.ordersList.splice(index, 1), {"message": "se elimino correctamente su orden con el id" + id};
+      const order = await this.findOne(id);
+      await order.destroy();
+      return {id};
     }
 }
 

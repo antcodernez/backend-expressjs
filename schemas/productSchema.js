@@ -6,9 +6,9 @@ const Joi = require("joi");
 const id = Joi.number();
 // tipo de campo que es string() y luego la validacion uuid()
 const name = Joi.string().min(3).max(20);
-const price = Joi.number().integer().min(10);
+const price = Joi.number().integer().positive().min(10);
 const img = Joi.string().uri();
-const isBlock = Joi.bool();
+const isBlock = Joi.boolean();
 //Arriba: validaciones
 
 //creando un schema para la validacion, reunira todos los campos
@@ -17,7 +17,7 @@ const createProductSchema = Joi.object({
   name: name.required(),
   price: price.required(),
   image:img.required(),
-  isBlock: isBlock
+  isBlock: isBlock.required()
 });
 
 

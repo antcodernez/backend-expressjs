@@ -50,7 +50,7 @@ class CategoriesService
       const categorie = await models.Categorie.findByPk(id);
       if(!categorie)
         {
-          throw boom.notFound("Categorie not found chef");
+          throw boom.notFound("Categorie not found cheef");
         }
       return categorie;
     }
@@ -81,7 +81,7 @@ class CategoriesService
       //     }
       //   return this.categories[index];
       const categorie = await this.findOne(id);
-      const response = categorie.update(id, changes);
+      const response = categorie.update(changes);
       return response;
     }
   async delete(id)

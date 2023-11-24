@@ -59,7 +59,7 @@ async (req, res, next) =>
     try
       {
         const body = req.body;
-        const {id} = req.params;
+        const { id } = req.params;
         const department = await service.update(id,body);
         res.json(department);
       }
