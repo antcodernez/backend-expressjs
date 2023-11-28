@@ -15,8 +15,8 @@ const sequelize = new Sequelize(URI, {
 //se corre despues de crear la instancia
 setupModels(sequelize);
 
-sequelize.sync() //Va a hacer una sincronizacion; va a tomar los modelos y va a crear la estructura
-// sequelize.sync() no se recomienda porque no se puede llevar un sistema de migraciones
+// sequelize.sync() //Va a hacer una sincronizacion; va a tomar los modelos y va a crear la estructura
+// sequelize.sync() no se recomienda porque no se puede llevar un sistema de migraciones y se debe de cambiar en produccion
 
 // Existe el modo de sincronización global sequelize.sync() o particular modelo.sync()` donde tendremos parámetros:
 //force: true. Eliminar la existencia previa y creando en secuencia.
