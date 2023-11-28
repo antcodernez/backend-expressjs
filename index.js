@@ -2,6 +2,7 @@
 const express = require("express");
 const routerApi = require("./routes/indexRouting");
 const cors = require("cors");
+const morgan = require("morgan");
 const {logErrors, errorHandler, boomErrorHandler } = require("./middlewares/errorHandler");
 const queryErrorHandler = require("./middlewares/errorSequelize");
 const app = express(); // ejecutamos express como metodo dato que es un metodo constructor
@@ -10,6 +11,7 @@ const port = process.env.PORT || 9222; // donde quiero que corra mi app
 
 // implementamos in midleware nativo de express, se usa cuando quiero empezar a recibir informacion en formato json
 app.use(express.json());
+app.use(morgan("tiny"));
 
 
 const  whiteList = ["http://127.0.0.1:5501", "http://myapp.com", " http://localhost:9222"]; //aqui van los origenes donde si quiero tener peticiones
@@ -47,7 +49,6 @@ app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(errorHandler);
 app.use(queryErrorHandler);
-
 
 app.listen(port, () => {
   console.log(`Ya estoy funcionando master en el puerto ${port} http://localhost:9222`);

@@ -4,9 +4,10 @@ const setupModels = require("../db/models");
 
 const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
+const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
 
- const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
 //const URI = "mysql://tester:tucola23@localhost:3306/my_store";
+
 const sequelize = new Sequelize(URI, {
   dialect: "postgres",
 }); // el va a usar el pooling por detras
@@ -15,6 +16,7 @@ const sequelize = new Sequelize(URI, {
 setupModels(sequelize);
 
 sequelize.sync() //Va a hacer una sincronizacion; va a tomar los modelos y va a crear la estructura
+// sequelize.sync() no se recomienda porque no se puede llevar un sistema de migraciones
 
 // Existe el modo de sincronización global sequelize.sync() o particular modelo.sync()` donde tendremos parámetros:
 //force: true. Eliminar la existencia previa y creando en secuencia.
