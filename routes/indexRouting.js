@@ -2,6 +2,7 @@ const productsRouter = require("./products");
 const usersRouter = require("./users");
 const categoriesRouter = require("./categories");
 const myOrders = require("./myorders");
+const customers = require("./constumers");
 const express = require("express");
 
 //Vamos a generar un routing por versiones a traves de una ruta maestra para que mis clientes de frontend no choquen con mis clientes de IOT
@@ -13,6 +14,7 @@ function routerApi(app)
       router.use("/users", usersRouter);
       router.use("/categories", categoriesRouter);
       router.use("/my-orders", myOrders);
+      router.use("/customers", customers);
 
       //Version 2 para mobiles
       const routerIOT = express.Router()
