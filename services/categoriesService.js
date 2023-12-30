@@ -45,7 +45,9 @@ class CategoriesService
       //     throw boom.notFound("categorie not found xd");
       //   }
 
-      const categorie = await models.Category.findByPk(id);
+      const categorie = await models.Category.findByPk(id, {
+        include: ["products"]
+      });
       if(!categorie)
         {
           throw boom.notFound("Categorie not found cheef");

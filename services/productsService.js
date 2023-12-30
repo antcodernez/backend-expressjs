@@ -1,6 +1,6 @@
 //Vamos a definir la lógica de las interacciones a nivel transaccional que van a tener mi datos
 //Manejo transaccional hacia un producto
-const {faker} = require("@faker-js/faker");
+//const {faker} = require("@faker-js/faker");
 const boom =  require("@hapi/boom");
 const {models} = require("../libs/sequelize");
 
@@ -13,18 +13,18 @@ class ProductService
       }
       generate()
         {
-          const limit = 100;
-          for(let i = 0; i < limit; i++)
-            {
-              this.products.push(
-                {
-                  id: faker.string.uuid(),
-                  name: faker.commerce.productName(),
-                  price: parseInt(faker.commerce.price()),
-                  image: faker.image.url(),
-                  isBLock: faker.datatype.boolean()
-                });
-            }
+          // const limit = 100;
+          // for(let i = 0; i < limit; i++)
+          //   {
+          //     this.products.push(
+          //       {
+          //         id: faker.string.uuid(),
+          //         name: faker.commerce.productName(),
+          //         price: parseInt(faker.commerce.price()),
+          //         image: faker.image.url(),
+          //         isBLock: faker.datatype.boolean()
+          //       });
+          //   }
         }
       async create(data)
         {
@@ -54,7 +54,7 @@ class ProductService
           //       });
           //   } codigo deprecado
 
-          const response = await models.Product.findAll();
+          const response = await models.Product.findAll({include: ["category"]});
           return response;
         }
       async findOne(id)
