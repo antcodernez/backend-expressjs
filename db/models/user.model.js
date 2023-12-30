@@ -38,7 +38,13 @@ const UserSchema = {
 class User extends Model { // Model tiene metodos que seran las formas en las que yo voy a hacer querys
 //Voy a crear metodos staticos; que no necesito una declaracion del objeto para acceder a los metodos
 
-  static associate(){
+  static associate(models){
+    //Vamos a crear una relacion bidireccional con customers
+    this.hasOne(models.Customer, {
+      as: "customer",
+      foreignKey: "userId"
+      // Se le asigno un alias a la asociacion, y como la relacion esta del lado del customer tengo que indicar como la va a encontrar
+    })
     //definimos todas las relaciones
   }
   static config(sequelize){

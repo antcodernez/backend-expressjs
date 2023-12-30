@@ -32,6 +32,7 @@ const CustomerSchema = {
     field: "user_id",
     allowNull: false,
     type: DataTypes.INTEGER,
+    unique: true,
     references: {
       model: USER_TABLE, //Le digo a que tabla va relacionada
       key: "id"
@@ -47,6 +48,7 @@ class Customer extends Model {
     {
       this.belongsTo(models.User, {as: 'user'});
       //Estoy cargando la llave foranea en customer
+      //El alias es importante porque puedo cargar las asociaciones en mis consultas
     }
 
   static config(sequelize)

@@ -24,6 +24,7 @@ function setupModels(sequelize)
 
     //Las relaciones se ejecutan despues de correr los modelos
 
+    User.associate(sequelize.models);
     Customer.associate(sequelize.models);
   }
 
