@@ -1,39 +1,48 @@
-const {Model, DataTypes, Sequelize} = require("sequelize");
+const { Model, DataTypes, Sequelize } = require('sequelize');
 
-const CATEGORIE_TABLE = "tb_categories";
+const CATEGORY_TABLE = 'tb_categories'; // nombre de la tabla
 
-const CategorieSchema = {
+const CategorySchema = {
+  // El esquema define la estructura de la BD.
   id: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   name: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    unique: true,
+  },
+  image: {
+    allowNull: false,
+    type: DataTypes.STRING,
   },
   createdAt: {
-    allowNull: true,
+    allowNull: false,
     type: DataTypes.DATE,
-    field: "create_at",
-    defaultValue: Sequelize.NOW()
+    field: 'created_at',
+    defaultValue: Sequelize.NOW,
+  },
+};
+
+class Category extends Model {
+  static associate(models) {
+    this.hasMany(models.Product, {
+      as: 'products',
+      foreignKey: 'categoryId',
+    });
   }
-}
 
-class Categorie extends Model {
-  static associate()
-    {
-
-    }
-  static config(sequelize){
+  static config(sequelize) {
     return {
       sequelize,
-      tableName: CATEGORIE_TABLE,
-      modelName: "Categorie",
-      timestamps: false
-    }
+      tableName: CATEGORY_TABLE,
+      modelName: 'Category',
+      timestamps: false,
+    };
   }
 }
 
-module.exports = {CATEGORIE_TABLE, CategorieSchema, Categorie};
+module.exports = { Category, CATEGORY_TABLE, CategorySchema };

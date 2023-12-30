@@ -10,7 +10,6 @@ class CategoriesService
     {
       this.categories = [];
       this.generate();
-
     }
   generate()
     {
@@ -26,13 +25,12 @@ class CategoriesService
     }
   async find()
     {
-      const response = await models.Categorie.findAll();
+      const response = await models.Category.findAll();
       return response;
       // return query == undefined ? this.categories : this.categories.slice(0, query);
       // const client = await getConnection();
       // const response = await client.query("select * from tb_tasks");
       // return response.rows;
-
     }
   async findOne(id)
     {
@@ -47,7 +45,7 @@ class CategoriesService
       //     throw boom.notFound("categorie not found xd");
       //   }
 
-      const categorie = await models.Categorie.findByPk(id);
+      const categorie = await models.Category.findByPk(id);
       if(!categorie)
         {
           throw boom.notFound("Categorie not found cheef");
@@ -62,7 +60,7 @@ class CategoriesService
       // }
       // this.categories.push(newDepartment);
       // return newDepartment;
-      const newCategorie = await models.Categorie.create(data);
+      const newCategorie = await models.Category.create(data);
       return newCategorie;
     }
   async update(id, changes)
@@ -96,6 +94,5 @@ class CategoriesService
     }
 
 }
-
 
 module.exports = CategoriesService;

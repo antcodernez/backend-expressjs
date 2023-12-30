@@ -1,55 +1,64 @@
-const {Model, DataTypes, Sequelize} = require("sequelize");
+const { Model, DataTypes, Sequelize } = require('sequelize');
+const { CATEGORY_TABLE } = require('./categorie.model');
 
-const  PRODUCT_TABLE = "tb_products";
+const PRODUCT_TABLE = 'tb_products'; // nombre de la tabla
 
 const ProductSchema = {
-  id:{
+  // El esquema define la estructura de la BD.
+  id: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
-	name: {
+  name: {
     allowNull: false,
-    type: DataTypes.STRING
-  },
-  price: {
-    allowNull: false,
-    type: DataTypes.FLOAT
+    type: DataTypes.STRING,
   },
   image: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
   },
-  isBLock: {
-    allowNull: true,
-    type: DataTypes.BOOLEAN
+  description: {
+    allowNull: false,
+    type: DataTypes.TEXT,
+  },
+  price: {
+    allowNull: false,
+    type: DataTypes.INTEGER,
   },
   createdAt: {
     allowNull: false,
-    type:DataTypes.DATE,
-    field: "create_at",
-    defaultValue: Sequelize.NOW
+    type: DataTypes.DATE,
+    field: 'created_at',
+    defaultValue: Sequelize.NOW,
+  },
+  categoryId: {
+    field: 'category_id',
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    references: {
+      model: CATEGORY_TABLE,
+      key: 'id',
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
+  },
+};
+
+class Product extends Model {
+  static associate(models) {
+    this.belongsTo(models.Category, { as: 'category' });
+  }
+
+  static config(sequelize) {
+    return {
+      sequelize,
+      tableName: PRODUCT_TABLE,
+      modelName: 'Product',
+      timestamps: false,
+    };
   }
 }
 
-// define o extend Model
-// Se infiere el nombre de la tabla y se generaliza en plural, sequelize.define('user', userSchema); definirá la tabla users.
-class Product extends Model
-  {
-    static associate()
-      {
-
-      }
-    static config(sequelize)
-      {
-        return {
-          sequelize,
-          tableName: PRODUCT_TABLE,
-          modelName: "Product",
-          timestamps: false
-        }
-      }
-  }
-
-module.exports = { PRODUCT_TABLE, ProductSchema, Product};
+module.exports = { Product, PRODUCT_TABLE, ProductSchema };
