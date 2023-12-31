@@ -1,5 +1,5 @@
 const {Model, Sequelize, DataTypes} = require ("sequelize");
-
+const { CUSTOMER_TABLE } = require("./customer.model")
 const ORDER_TABLE = "tb_orders";
 
 const OrderSchema = {
@@ -9,9 +9,21 @@ const OrderSchema = {
     primaryKey: true,
     type: DataTypes.INTEGER
   },
-  productName: {
+  orderState: {
+    type: DataTypes.ENUM('entregado', 'enviado', 'pendiente'),
+    allowNull: true,
+    defaultValue: 'pendiente',
+  },
+  customerId: {
+    field: 'customer_id',
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.INTEGER,
+    references: {
+      model: CUSTOMER_TABLE,
+      key: 'id',
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
   },
   createdAt: {
     allowNull: false,
@@ -22,17 +34,19 @@ const OrderSchema = {
 }
 
 class Order extends Model {
-  static associate()
-    {
+  static associate(models) {
+    this.belongsTo(models.Customer, {
+      as: "customer",
+    });
+  }
 
-    }
-  static config(sequelize){
+  static config(sequelize) {
     return {
       sequelize,
       tableName: ORDER_TABLE,
       modelName: "Order",
-      timestaps: false
-    }
+      timestamps: false, // Fix the typo here
+    };
   }
 }
 

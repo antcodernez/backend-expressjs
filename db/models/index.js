@@ -19,8 +19,8 @@ function setupModels(sequelize)
     // recibe como parametro el schema y seguido la configuracion que es un metodo estatico sin necesidad de una instancia
     Category.init(CategorySchema, Category.config(sequelize));
     Product.init(ProductSchema, Product.config(sequelize));
-    Order.init(OrderSchema, Order.config(sequelize));
     Customer.init(CustomerSchema, Customer.config(sequelize));
+    Order.init(OrderSchema, Order.config(sequelize));
 
     //Las relaciones se ejecutan despues de correr los modelos
     //One to one
@@ -29,6 +29,7 @@ function setupModels(sequelize)
     // One to many
     Category.associate(sequelize.models);
     Product.associate(sequelize.models);
+    Order.associate(sequelize.models);
   }
 
 module.exports = setupModels;

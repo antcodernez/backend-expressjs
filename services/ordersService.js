@@ -3,6 +3,7 @@ const boom = require("@hapi/boom");
 // const pool = require("../libs/postgres.pool" ); se cambio por una en sequelize
 // const sequelize = require("../libs/sequelize"); codigo deprecado
 const { models} = require("../libs/sequelize");
+const { Association } = require("sequelize");
 
 
 class ordersService
@@ -41,7 +42,13 @@ class ordersService
     {
       // const element = this.ordersList.find( item => item.id == id);
       // return element != undefined ? element : boom.notFound("Order not found chef");
-      const order = await models.Order.findByPk(id);
+      const order = await models.Order.findByPk(id, {
+        include: [{
+          association: "customer",
+          include: ["user"]
+          // traer datos de forma anidada, significa que me traigo al customer y del customer me traigo anidado el user del customer
+        }]
+      });
 
       if(order != null)
         {

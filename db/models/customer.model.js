@@ -47,6 +47,10 @@ class Customer extends Model {
   static associate(models)
     {
       this.belongsTo(models.User, {as: 'user'});
+      this.hasMany(models.Order, {
+        as: 'orders',
+        foreignKey: "customerId"
+      });
       //Estoy cargando la llave foranea en customer
       //El alias es importante porque puedo cargar las asociaciones en mis consultas
     }

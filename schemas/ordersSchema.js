@@ -1,10 +1,12 @@
 const Joi = require("joi");
 
-const id = Joi.number();
-const product = Joi.string().min(3).max(40);
+const id = Joi.number().integer();
+const customerId = Joi.number().integer();
+const orderState = Joi.string().valid('entregado', 'enviado', 'pendiente');
 
 const createOrdersSchema = Joi.object({
-  productName: product.required()
+  customerId: customerId.required(),
+  orderState: orderState
 });
 
 const getOrdersSchema = Joi.object({
@@ -12,7 +14,7 @@ const getOrdersSchema = Joi.object({
 });
 
 const updateOrdersSchema = Joi.object({
-  productName: product
+  orderState
 });
 
 module.exports = {createOrdersSchema, getOrdersSchema, updateOrdersSchema}
