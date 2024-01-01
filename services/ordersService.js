@@ -3,7 +3,6 @@ const boom = require("@hapi/boom");
 // const pool = require("../libs/postgres.pool" ); se cambio por una en sequelize
 // const sequelize = require("../libs/sequelize"); codigo deprecado
 const { models} = require("../libs/sequelize");
-const { Association } = require("sequelize");
 
 
 class ordersService
