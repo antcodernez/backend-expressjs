@@ -1,6 +1,7 @@
 //Vamos a definir la lógica de las interacciones a nivel transaccional que van a tener mi datos
 //Manejo transaccional hacia un producto
 //const {faker} = require("@faker-js/faker");
+const {Op} = require("sequelize")
 const boom =  require("@hapi/boom");
 const {models} = require("../libs/sequelize");
 
@@ -55,6 +56,7 @@ class ProductService
           //   } codigo deprecado
           const options = {
             include: ["category"],
+            where: {}
           }
           const {limit, offset} = query;
 
@@ -62,6 +64,20 @@ class ProductService
             {
               options.limit = limit;
               options.offset = offset;
+            }
+
+          const { price } = query;
+          if (price)
+            {
+              options.where.price = price;
+            }
+          const {price_min, price_max} = query;
+
+          if(price_max && price_min)
+            {
+              options.where.price = {
+                [Op.between]: [price_min, price_max],
+              };
             }
           const response = await models.Product.findAll(options);
 
