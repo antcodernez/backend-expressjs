@@ -30,6 +30,25 @@ const OrderSchema = {
     type: DataTypes.DATE,
     field: "create_at",
     defaultValue: Sequelize.NOW
+  },
+  //Voy a generar datos calculados por medio de un campo virtual
+  total: {
+    type:DataTypes.VIRTUAL, //Asi indico que este campo no va a estar en la tabla
+    get() { //Con un get especifico como voy a calcular ese campo
+        if(this.items.length > 0)
+          {
+            return this.items.reduce((total, item) => {
+              return total + (item.price * item.OrderProduct.amount);
+            }, 0); //tiliza la función reduce en la propiedad items para calcular el valor total. La función reduce recorre cada elemento en items y acumula un valor total. En cada iteración, se multiplica el precio del artículo (item.price) por la cantidad del artículo (item.OrderProduct.amount) y se suma al total acumulado.
+            // total: Es el acumulador que se va actualizando en cada iteración.
+            // item: Representa cada elemento en items.
+            // item.price * item.OrderProduct.amount: Calcula el valor del artículo multiplicando su precio por la cantidad.
+            // , 0): El segundo argumento de reduce establece el valor inicial del acumulador (total). En este caso, comienza en 0.
+
+            // return 0;: Si no hay elementos en items (longitud igual a cero), se devuelve 0 como el valor total.
+          }
+        return 0;
+    }
   }
 }
 

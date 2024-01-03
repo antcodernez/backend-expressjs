@@ -46,9 +46,22 @@ class ordersService
           association: "customer",
           include: ["user"]
           // traer datos de forma anidada, significa que me traigo al customer y del customer me traigo anidado el user del customer
-        }]
+        },
+        'items'
+      ]
       });
-
+      // asi puedo modificar mi consulta para que los campos de la relacion user solo me traiga la contraseña y usuario de la relacion user
+      // const order = await models.Order.findByPk(id, {
+      //   include: [{
+      //     association: "customer",
+      //     include: [{
+      //       association: "user",
+      //       attributes: ["email", "password"]
+      //     }],
+      //   },
+      //   'items'
+      //   ]
+      // });
       if(order != null)
         {
           return order;
@@ -100,6 +113,11 @@ class ordersService
       const order = await this.findOne(id);
       await order.destroy();
       return {id};
+    }
+  async addItem(data)
+    {
+      const newItem = await models.OrderProduct.create(data);
+      return newItem;
     }
 }
 
