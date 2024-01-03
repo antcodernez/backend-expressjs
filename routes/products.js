@@ -5,13 +5,15 @@ const express = require("express");
 const ProductService = require(`../services/productsService`);//Importanto mi servicio creado
 const  validatorHandler = require(`../middlewares/validatorHandler`);
 
-const  {createProductSchema, updateProductSchema, getProductSchema} = require(`../schemas/productSchema`);
+const  {createProductSchema, updateProductSchema, getProductSchema, queryProductSchema} = require(`../schemas/productSchema`);
 
 const service = new ProductService();//Instanciar mi clase de servicio de productos
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/",
+  validatorHandler(queryProductSchema, "query"),
+  async (req, res, next) => {
   // const {limit} = req.query;
   //   if(limit != undefined)
   //     {
@@ -26,7 +28,7 @@ router.get("/", async (req, res, next) => {
 
   try
     {
-      const products = await service.find();
+       const products = await service.find(req.query);
       res.json(products);
     }
   catch (error)

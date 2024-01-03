@@ -37,7 +37,7 @@ class ProductService
           const product = await models.Product.create(data);
           return product;
         }
-      async find()
+      async find(query)
         {
           // if (query == undefined)
           //   {
@@ -53,8 +53,18 @@ class ProductService
           //         setTimeout(() => resolve(this.products.slice(0,query)), 1000);
           //       });
           //   } codigo deprecado
+          const options = {
+            include: ["category"],
+          }
+          const {limit, offset} = query;
 
-          const response = await models.Product.findAll({include: ["category"]});
+          if(limit && offset)
+            {
+              options.limit = limit;
+              options.offset = offset;
+            }
+          const response = await models.Product.findAll(options);
+
           return response;
         }
       async findOne(id)

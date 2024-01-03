@@ -10,6 +10,9 @@ const description = Joi.string().min(10);
 const img = Joi.string().uri();
 const categoryId =  Joi.number().integer();
 
+const limit = Joi.number().integer();
+const offset =  Joi.number().integer();
+
 //Arriba: validaciones
 
 //creando un schema para la validacion, reunira todos los campos
@@ -37,10 +40,15 @@ const getProductSchema = Joi.object({
   id: id.required(),
 });
 
+const queryProductSchema = Joi.object({
+  limit,
+  offset
+})
 
 module.exports =
   {
     createProductSchema,
     updateProductSchema,
-    getProductSchema
+    getProductSchema,
+    queryProductSchema
   }
