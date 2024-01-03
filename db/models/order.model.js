@@ -38,6 +38,13 @@ class Order extends Model {
     this.belongsTo(models.Customer, {
       as: "customer",
     });
+    //Relacion muchos a muchos, digo que el modelo order tiene una relacion a muchos productos que se va a resolver con mis indicadores abajo
+    this.belongsToMany(models.Product, {
+      as: "items",
+      through: models.OrderProduct, //A traves de cual tabla voy a resolver esta relacion
+      foreignKey: "orderId",
+      otherKey: "productId"
+    }); // Voy a indicar quien es mi tabla ternaria
   }
 
   static config(sequelize) {

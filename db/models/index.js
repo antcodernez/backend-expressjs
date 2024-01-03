@@ -5,7 +5,7 @@ const {Product, ProductSchema} = require("./product.model");
 const {Category, CategorySchema} = require("./categorie.model")
 const {Order, OrderSchema} = require("./order.model");
 const {Customer, CustomerSchema} = require("./customer.model");
-
+const {OrderProduct, OrderProductSchema} = require("./order-product.model");
 
 
 //Vamos a crear una funcion, tiene como parametro la conexion a la bd
@@ -21,6 +21,7 @@ function setupModels(sequelize)
     Product.init(ProductSchema, Product.config(sequelize));
     Customer.init(CustomerSchema, Customer.config(sequelize));
     Order.init(OrderSchema, Order.config(sequelize));
+    OrderProduct.init(OrderProductSchema, OrderProduct.config(sequelize));
 
     //Las relaciones se ejecutan despues de correr los modelos
     //One to one
@@ -30,6 +31,8 @@ function setupModels(sequelize)
     Category.associate(sequelize.models);
     Product.associate(sequelize.models);
     Order.associate(sequelize.models);
+    //many to many
+    
   }
 
 module.exports = setupModels;
