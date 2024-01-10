@@ -5,6 +5,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const {logErrors, errorHandler, boomErrorHandler } = require("./middlewares/errorHandler");
 const queryErrorHandler = require("./middlewares/errorSequelize");
+const { checkApiKey } = require("./middlewares/authHandler")
 const app = express(); // ejecutamos express como metodo dato que es un metodo constructor
 const port = process.env.PORT || 9222; // donde quiero que corra mi app
 //asignando un puerto que viene en una variable de entorno porque no sabemos que puerto nos van asignar
@@ -46,10 +47,12 @@ app.use(cors(options)); //Implementando cors para remover la proteccion por defe
 
 //Implementado los middlewares de tipo error; este tipo de middleware se hacen despues del routing
 app.use(logErrors);
+app.use(queryErrorHandler);
 app.use(boomErrorHandler);
 app.use(errorHandler);
-app.use(queryErrorHandler);
-
+app.get("/xd", checkApiKey, (req, res) => {
+  res.send("Hola el middleware funciona, y puedes ver este endpoint con tu apikey :D");
+})
 app.listen(port, () => {
   console.log(`Ya estoy funcionando master en el puerto ${port} http://localhost:9222`);
 });
