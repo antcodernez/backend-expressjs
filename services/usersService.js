@@ -1,5 +1,7 @@
 const {faker} = require("@faker-js/faker");
 const boom = require("@hapi/boom");
+const bcrypt = require("bcrypt");
+
 const { models } = require("./../libs/sequelize");
 
 class UserService
@@ -95,13 +97,14 @@ class UserService
       }
     async create(data)
       {
-        // const newUser = {
-        //   id: faker.string.uuid(),
-        //   ...data
-        // }
-        // this.users.push(newUser);
-        // return newUser; CODIGO DEPRECADO
-        const newUser = await models.User.create(data); //metodo crea un nuevo usuario
+        const hash = await bcrypt.hash(data.password, 10);
+        const newUser = await models.User.create({
+          ...data,
+          password: hash
+        }); //metodo crea un nuevo usuario
+
+        delete newUser.dataValues.password // Se borra así un campo del objeto porque estamos usando sequelize
+
         return newUser;
       }
   }
