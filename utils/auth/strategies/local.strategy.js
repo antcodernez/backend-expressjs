@@ -2,7 +2,6 @@ const {Strategy} = require("passport-local");
 const boom = require("@hapi/boom");
 const bcrypt = require("bcrypt");
 const UserService = require("../../../services/usersService");
-const { use } = require("passport");
 
 const service = new UserService();
 
@@ -27,7 +26,7 @@ const localStrategy = new Strategy(
             done(boom.unauthorized("wrong password ñ.ñ"), false)
           }
         delete user.dataValues.password;
-        
+
         done(null, user);
 
       }
