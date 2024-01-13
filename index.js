@@ -45,6 +45,8 @@ routerApi(app);
 //Se van a enviar las configuraciones al cors
 app.use(cors(options)); //Implementando cors para remover la proteccion por defecto que es que solo se aceptan peticiones desde su mismo origen
 
+require("./utils/auth"); // Implementando un
+
 //Implementado los middlewares de tipo error; este tipo de middleware se hacen despues del routing
 app.use(logErrors);
 app.use(queryErrorHandler);

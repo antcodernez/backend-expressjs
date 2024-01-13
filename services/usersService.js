@@ -29,15 +29,13 @@ class UserService
       {
         const response = await models.User.findAll({include: ["customer"]});
         return response;
-        // if(query == undefined)
-        //   {
-        //     return this.users;
-        //   }
-        // else
-        //   {
-        //     return this.users.slice(0, query);
-        //   }
-
+      }
+    async findByEmail(email)
+      {
+        const response = await models.User.findOne({
+          where: {email}
+        });
+        return response;
       }
     async findOne(id)
       {
