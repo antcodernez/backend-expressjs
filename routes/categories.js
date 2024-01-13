@@ -1,13 +1,18 @@
 const express = require("express");
 const passport = require("passport");
 
-const router = express.Router();
 const CategoriesService = require("../services/categoriesService");
-const service = new CategoriesService();
 const validatorHandler = require("../middlewares/validatorHandler");
 const {createCategorieSchema, getCategorieSchema, updateCategoriesSchema} = require("../schemas/categoriesSchema.js");
+const {checkRoles} = require("../middlewares/authHandler.js");
 
-router.get("/", async (req, res, next) => {
+const router = express.Router();
+const service = new CategoriesService();
+
+router.get("/",
+  passport.authenticate("jwt", {session: false}),
+  checkRoles("admin", "chef", "seller"),
+  async (req, res, next) => {
   // const {limit} = req.query;
   // if(limit != undefined)
   //
@@ -23,19 +28,22 @@ router.get("/", async (req, res, next) => {
 });
 
 
-router.get("/:id", validatorHandler(getCategorieSchema, "params"),
-async(req, res, next) => {
-  try
-    {
-      const { id } = req.params;
-      const department = await service.findOne(id);
-      res.json(department);
-    }
-  catch(e)
-    {
-      next(e);
-    }
-});
+router.get("/:id",
+  passport.authenticate("jwt", {session: false}),
+  checkRoles("admin", "chef", "seller"),
+  validatorHandler(getCategorieSchema, "params"),
+  async(req, res, next) => {
+    try
+      {
+        const { id } = req.params;
+        const department = await service.findOne(id);
+        res.json(department);
+      }
+    catch(e)
+      {
+        next(e);
+      }
+  });
 // //endpoint con dos parametros
 // router.get("/categories/:categoryId/products/:productId", (req, res) => {
 
@@ -50,6 +58,7 @@ router.post(`/`,
 
   passport.authenticate("jwt", {session: false}),
     // Al usuario que se le asigno ese token, desde el cliente debe enviar en el header ese token para que se mantenga en la sesion
+  checkRoles("admin", "chef", "seller"),
   validatorHandler(createCategorieSchema, "body"),
 
   async(req, res, next) =>
@@ -67,22 +76,29 @@ router.post(`/`,
 
     });
 
-router.patch("/:id", validatorHandler(getCategorieSchema, "params"),
-validatorHandler(updateCategoriesSchema, "body"),
-async (req, res, next) =>
-  {
-    try
-      {
-        const body = req.body;
-        const { id } = req.params;
-        const department = await service.update(id,body);
-        res.json(department);
-      }
-    catch (e)
-      {
-       next(e)
-      }
-  });
+router.patch("/:id",
+  passport.authenticate("jwt", {session: false}),
+
+  checkRoles("admin", "customer"),
+
+  validatorHandler(getCategorieSchema, "params"),
+
+  validatorHandler(updateCategoriesSchema, "body"),
+
+  async (req, res, next) =>
+    {
+      try
+        {
+          const body = req.body;
+          const { id } = req.params;
+          const department = await service.update(id,body);
+          res.json(department);
+        }
+      catch (e)
+        {
+        next(e)
+        }
+    });
 
 router.delete("/:id", validatorHandler(getCategorieSchema, "params"),
 async(req, res) =>
