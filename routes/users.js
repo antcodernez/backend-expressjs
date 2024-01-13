@@ -4,30 +4,22 @@ const router = express.Router();
 const UserService = require("../services/usersService.js");
 const validatorHandler = require("../middlewares/validatorHandler.js");
 const {createUserSchema, getUserSchema, updateUserSchema} = require("../schemas/usersSchema.js");
+const passport = require("passport");
 const service = new UserService();
 
-router.get("/", async (req, res, next) => {
-  try
-    {
-      const users = await service.find();
-      res.json(users);
-    }
-  catch(e)
-    {
-      next(e);
-    }
-  // const { limit } = req.query;
-  // if(limit != undefined)
-  //   {
-  //     const users = await service.find(limit);
-  //     res.json(users);
-  //   }
-  // else
-  //   {
-  //     const users = await service.find();
-  //     res.json(users);
-  //   }
-});
+router.get("/",
+  passport.authenticate("jwt", {session: false}),
+  async (req, res, next) => {
+    try
+      {
+        const users = await service.find();
+        res.json(users);
+      }
+    catch(e)
+      {
+        next(e);
+      }
+  });
 
 router.post("/", validatorHandler(createUserSchema, "body"),
   async (req, res, next) =>

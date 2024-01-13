@@ -1,4 +1,6 @@
 const express = require("express");
+const passport = require("passport");
+
 const router = express.Router();
 const CategoriesService = require("../services/categoriesService");
 const service = new CategoriesService();
@@ -44,13 +46,26 @@ async(req, res, next) => {
 //     });
 // });
 
-router.post(`/`, validatorHandler(createCategorieSchema, "body"),
-async(req, res) =>
-  {
-    const body = req.body;
-    const newDepartment = await service.create(body);
-    res.json(newDepartment)
-  });
+router.post(`/`,
+
+  passport.authenticate("jwt", {session: false}),
+    // Al usuario que se le asigno ese token, desde el cliente debe enviar en el header ese token para que se mantenga en la sesion
+  validatorHandler(createCategorieSchema, "body"),
+
+  async(req, res, next) =>
+    {
+        try
+          {
+            const body = req.body;
+            const newDepartment = await service.create(body);
+            res.json(newDepartment);
+          }
+        catch (error)
+          {
+            next(error);
+          }
+
+    });
 
 router.patch("/:id", validatorHandler(getCategorieSchema, "params"),
 validatorHandler(updateCategoriesSchema, "body"),

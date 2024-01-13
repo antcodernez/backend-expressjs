@@ -3,11 +3,14 @@ const router = express.Router();
 const OrderService = require("../services/ordersService.js");
 const validatorHandler = require("../middlewares/validatorHandler.js");
 const { getOrdersSchema, addItemSchema, createOrdersSchema } = require("../schemas/ordersSchema.js");
+const passport = require("passport");
 
 
 const service = new OrderService();
 
-router.get("/", async (req, res, next) => {
+router.get("/",
+  passport.authenticate("jwt", {session: false})
+  ,async (req, res, next) => {
   // const myOrders = await service.find();
   // res.json(myOrders);
   try
@@ -35,26 +38,39 @@ router.get("/:id", validatorHandler(getOrdersSchema, "params"), async (req, res,
 });
 
 
-router.post("/", validatorHandler(createOrdersSchema, "body"),
-async (req, res) =>
-  {
-    const body = req.body;
-    const order = await service.create(body);
-    res.json(order);
-  });
+router.post("/",
+  passport.authenticate("jwt", {session: false})
+  ,validatorHandler(createOrdersSchema, "body"),
+    async (req, res, next) =>
+    {
+        try
+          {
+            const body = req.body;
+            const order = await service.create(body);
+            res.json(order);
+          }
+        catch (error)
+          {
+            next(error);
+          }
 
-router.post("/add-item", validatorHandler(addItemSchema, "body"),
-async (req, res, next) =>
-  {
-      try {
-        const body = req.body;
-        const newItem = await service.addItem(body);
-        res.json(newItem);
-      } catch (error) {
-        next(error)
-      }
+    }
+);
 
-  });
+router.post("/add-item",
+  passport.authenticate("jwt", {session: false}),
+  validatorHandler(addItemSchema, "body"),
+  async (req, res, next) =>
+    {
+        try {
+          const body = req.body;
+          const newItem = await service.addItem(body);
+          res.json(newItem);
+        } catch (error) {
+          next(error)
+        }
+
+    });
 
 router.patch("/:id", validatorHandler(getOrdersSchema, "params"),
 // validatorHandler(updateOrdersSchema, "body"),
