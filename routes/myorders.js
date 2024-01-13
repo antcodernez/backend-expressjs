@@ -1,11 +1,11 @@
 const express = require("express");
-const router = express.Router();
-const OrderService = require("../services/ordersService.js");
-const validatorHandler = require("../middlewares/validatorHandler.js");
-const { getOrdersSchema, addItemSchema, createOrdersSchema } = require("../schemas/ordersSchema.js");
 const passport = require("passport");
 
+const OrderService = require("../services/ordersService.js");
+const validatorHandler = require("../middlewares/validatorHandler.js");
+const { getOrdersSchema, addItemSchema} = require("../schemas/ordersSchema.js");
 
+const router = express.Router();
 const service = new OrderService();
 
 router.get("/",
@@ -39,13 +39,13 @@ router.get("/:id", validatorHandler(getOrdersSchema, "params"), async (req, res,
 
 
 router.post("/",
-  passport.authenticate("jwt", {session: false})
-  ,validatorHandler(createOrdersSchema, "body"),
-    async (req, res, next) =>
+  passport.authenticate("jwt", {session: false}),
+  async (req, res, next) =>
     {
         try
           {
-            const body = req.body;
+            console.log(req.user);
+            const body = {userId: req.user.sub};
             const order = await service.create(body);
             res.json(order);
           }

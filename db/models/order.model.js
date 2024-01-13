@@ -35,7 +35,7 @@ const OrderSchema = {
   total: {
     type:DataTypes.VIRTUAL, //Asi indico que este campo no va a estar en la tabla
     get() { //Con un get especifico como voy a calcular ese campo
-        if(this.items.length > 0)
+        if(this.items && this.items.length > 0)
           {
             return this.items.reduce((total, item) => {
               return total + (item.price * item.OrderProduct.amount);

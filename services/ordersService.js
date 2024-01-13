@@ -1,4 +1,3 @@
-const {faker} = require("@faker-js/faker");
 const boom = require("@hapi/boom");
 // const pool = require("../libs/postgres.pool" ); se cambio por una en sequelize
 // const sequelize = require("../libs/sequelize"); codigo deprecado
@@ -10,23 +9,9 @@ class ordersService
   constructor()
     {
       this.ordersList = [];
-      this.generate();
 
       // this.pool = pool; //Le asigno el pool
       // this.pool.on("error", (err) => console.log(err)); // no es necesario por sequelize
-    }
-  generate()
-    {
-      const numberOrders = 15;
-
-      for(let i = 0; i < numberOrders; i++)
-        {
-            this.ordersList.push({
-              id: faker.string.uuid(),
-              product: faker.commerce.product(),
-              price: faker.commerce.price()
-            });
-        }
     }
   async find()
     {
@@ -36,6 +21,21 @@ class ordersService
       //sequelize acepta consultas directas y retorna la informacion en un array, la primera posicion tiene la data y en la segunda es la metadata       const [data, metadata] = await sequelize.query(query);
       const response = await models.Order.findAll();
       return response;
+    }
+  async findByUser(userId)
+    {
+      const orders = await models.Order.findAll({
+        where : {
+          "$customer.user.id$": userId //Como hacer consultas entre asociaciones
+        },
+        include: [{
+          association: "customer",
+          include: ["user"]
+        }
+      ]
+      });
+
+      return orders;
     }
   async findOne(id)
     {
@@ -79,8 +79,21 @@ class ordersService
       // }
       // this.ordersList.push(newOrder);
       // return newOrder;
+      const customer = await models.Customer.findOne({
+        where: {
+         user_id: data.userId
+        },
+        include: ["user"]
+      })
 
-      const newOrder = await models.Order.create(data);
+      if(!customer)
+        {
+          throw boom.badRequest("Customer not found chef :/");
+        }
+
+      const newOrder = await models.Order.create({
+        customerId: customer.id
+      });
       return newOrder;
     }
   async update(id,changes)
