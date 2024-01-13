@@ -9,6 +9,7 @@ const config = {
   dbName: process.env.DB_NAME,
   dbPort: process.env.DB_PORT,
   apiKey: process.env.API_KEY,
+  jwtSecret: process.env.JWT_SECRET,
   mysqlDB: process.env.MYSQLDATABASE,
   mysqlUser: process.env.MYSQLUSER,
   mysqlPassword: process.env.MYSQLPASSWORD
