@@ -1,10 +1,10 @@
 const express = require("express");
 const passport = require("passport");
-const jwt = require("jsonwebtoken");
-const {config} = require("../config/config");
+
+const { AuthService } = require("../services/authService");
 
 const router = express.Router();
-
+const service = new AuthService();
 
 router.post("/login",
   passport.authenticate("local", {session: false})
@@ -13,18 +13,24 @@ router.post("/login",
       try
         {
           const user  = req.user; // El middleware passport-authenticate deja en el req.user el usuario que la autenticacion dejo
-          const payload = {
-            sub: user.id,
-            role: user.role
-          };
+          res.json(service.singToken(user));
 
-          const token = jwt.sign(payload, config.jwtSecret);
+        }
+      catch (error)
+        {
+          next(error);
+        }
 
-          res.json({
-            user,
-            token
-          });
+    });
 
+router.post("/recovery",
+  async (req, res, next) =>
+    {
+      try
+        {
+          const { email } = req.body;
+          const rta = await service.sendMail(email);
+          res.json(rta);
         }
       catch (error)
         {
