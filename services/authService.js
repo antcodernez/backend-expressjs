@@ -24,6 +24,7 @@ class AuthService {
             throw boom.unauthorized("wrong password ñ.ñ");
           }
         delete user.dataValues.password;
+        delete user.dataValues.token;
 
         return user;
     }
@@ -35,11 +36,11 @@ class AuthService {
         role: user.role
       };
 
-      const token = jwt.sign(payload, config.jwtSecret);
+      const tokenSingIn = jwt.sign(payload, config.jwtSecret);
 
       return{
         user,
-        token
+        tokenSingIn
       };
 
     }
@@ -93,6 +94,35 @@ class AuthService {
       const rta = await this.sendMail(mail);
 
       return rta;
+    }
+
+  async changePassord(token, newPassword)
+    {
+      try
+        {
+          const payload = jwt.verify(token, config.jwtSecret);
+
+          const user = await service.findOne(payload.sub);
+
+          if(user.token !== token)
+            {
+              throw boom.unauthorized("You are unauthorized >:/");
+            }
+
+          const hash = await bcrypt.hash(newPassword, 10);
+          await service.update(user.id, {
+            token: null,
+            password: hash
+          })
+
+          return {
+            message: "The password was changed :D"
+          }
+        }
+      catch (error)
+        {
+          throw boom.unauthorized("You are unauthorized >:/");
+        }
     }
 }
 
