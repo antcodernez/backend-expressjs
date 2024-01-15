@@ -21,6 +21,10 @@ const UserSchema = {
     allowNull: false,
     type: DataTypes.STRING
   },
+  token: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   role: {
     allowNull: true,
     type: DataTypes.STRING,
