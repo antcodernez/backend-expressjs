@@ -44,14 +44,8 @@ class AuthService {
 
     }
 
-  async sendMail(email)
+  async sendMail(infoMail)
     {
-
-      const user = await service.findByEmail(email);
-        if(!user)
-          {
-            throw boom.unauthorized("this email doesn't exists");
-          }
 
       const transport = nodemailer.createTransport({
         host: config.emailHost,
@@ -62,23 +56,43 @@ class AuthService {
         }
       });
 
-      await transport.sendMail({
-        from: '"Calando esto" <marshday5@gmail.com>', // sender address
-        to: `${user.email}`, // list of receivers
-        subject: "Hola alv", // Subject line(asunto)
-        text: "Soy un correo de la app de tiendas xd", // plain text body
-        html: `
-        <b>Correo enviado desde la api :D <br/> Soy el jefe</b>
-
-        <h1>Hola ${user.email}</h1>
-        <p>Enviando correo para cambio de contraseña</p>
-        `
-      });
-
+      await transport.sendMail(infoMail);
 
       return {
         message: "mail sent ñ.ñ"
       }
+    }
+
+  async sentRecovery(email)
+    {
+      const user = await service.findByEmail(email);
+        if(!user)
+          {
+            throw boom.unauthorized("this email doesn't exists");
+          }
+      const payload = {sub: user.id};
+
+      const token = jwt.sign(payload, config.jwtSecret, {expiresIn: "15min"}); //Expira en 15 minutos el token
+      const link = `http://myfrontend.com/recovery?token=${token}`;
+      await service.update(user.id, {
+        token: token
+      });
+      const mail = {
+        from: config.emailTrapUser, // sender address
+        to: `${user.email}`, // list of receivers
+        subject: "Email to recovery your password", // Subject line(asunto)
+        html: `
+        <b>Email sent from the api :D <br/> I'm the chef</b>
+        <h1 style="color:red">Hi! ${user.email}</h1>
+
+        <p>Sending email to recovery your password</p>
+        <b>follow this link => ${link}</b>
+        `
+      }
+
+      const rta = await this.sendMail(mail);
+
+      return rta;
     }
 }
 
