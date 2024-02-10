@@ -45,13 +45,14 @@ routerApi(app);
 //Se van a enviar las configuraciones al cors
 app.use(cors(options)); //Implementando cors para remover la proteccion por defecto que es que solo se aceptan peticiones desde su mismo origen
 
-require("./utils/auth"); // Implementando un
+require("./utils/auth"); // Implementando las estrategias de jwt
 
 //Implementado los middlewares de tipo error; este tipo de middleware se hacen despues del routing
 app.use(logErrors);
 app.use(queryErrorHandler);
 app.use(boomErrorHandler);
 app.use(errorHandler);
+
 app.get("/xd", checkApiKey, (req, res) => {
   res.send("Hola el middleware funciona, y puedes ver este endpoint con tu apikey :D");
 })
